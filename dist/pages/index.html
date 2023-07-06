@@ -8,11 +8,21 @@
   </head>
   <body>
     <h1>index.html</h1>
-    @@include('../components/header.html') @@include('../components/nav.html')
+    <header class="header">
+	<h1>header55</h1>
+</header> <nav>
+  <a href="index.html">index</a>
+  <a href="./../blog/post-1.html">post-1</a>
+  <a href="./../blog/post-2.html">post-2</a>
+  <a href="contacts.html">contacts</a>
+</nav>
+
 
     <input type="text" id="date" autocomplete="off" />
 
-    @@include('../components/footer.html')
+    <footer class="footer">
+	<h2>footer</h2>
+</footer>
 
     <script src="./../js/index.bundle.js"></script>
   </body>
