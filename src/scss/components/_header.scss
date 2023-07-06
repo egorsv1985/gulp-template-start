@@ -1,0 +1,10 @@
+.header{
+	background-color: gray;
+	padding: 180px 0;
+	font-size: 30px;
+	color: #fff;
+	text-align: center;
+	@media (min-width: 768px) {
+		font-size: 20px;
+	}
+}
