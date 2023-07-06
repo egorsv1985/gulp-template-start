@@ -15,19 +15,14 @@ const fileIncludeSettings = {
   basepath: "@file",
 };
 
-const plumberConfig = {
-  errorHandler: function (error) {
-    const format = path
-      .extname(error.relativePath)
-      .toUpperCase()
-      .replace(".", "");
-    notify.onError({
-      title: "Error - " + format,
-      message: "<%= error.message %>",
+const plumberNotify = (title) => {
+  return {
+    errorHandler: notify.onError({
+      title: title,
+      message: "Error <%= error.message %>",
       sound: false,
-    })(error);
-    this.emit("end"); // Продолжаем выполнение задачи Gulp после ошибки
-  },
+    }),
+  };
 };
 
 gulp.task("html", function () {
@@ -35,13 +30,13 @@ gulp.task("html", function () {
     .src("./src/html/pages/*.html")
     .pipe(fileInclude({ fileIncludeSettings }))
     .pipe(gulp.dest("./dist/"))
-    .pipe(plumber(plumberConfig)); // Плагин plumber для обработки ошибок внутри pipe
+    .pipe(plumber(plumberConfig("HTML")));
 });
 
 gulp.task("sass", function () {
   return gulp
     .src("./src/scss/**/*.scss")
-    .pipe(plumber(plumberConfig)) // Плагин plumber для обработки ошибок
+    .pipe(plumber(plumberNotify("SASS")))
     .pipe(sourcemaps.init())
     .pipe(sass())
     .pipe(groupMedia())
@@ -54,11 +49,11 @@ gulp.task("images", function () {
 });
 
 gulp.task("fonts", function () {
-	return gulp.src("./src/fonts/**/*.*").pipe(gulp.dest("./dist/fonts/"));
-  });
-  gulp.task("files", function () {
-	return gulp.src("./src/files/**/*.*").pipe(gulp.dest("./dist/files/"));
-  });
+  return gulp.src("./src/fonts/**/*.*").pipe(gulp.dest("./dist/fonts/"));
+});
+gulp.task("files", function () {
+  return gulp.src("./src/files/**/*.*").pipe(gulp.dest("./dist/files/"));
+});
 gulp.task("server", function () {
   return gulp.src("./dist/").pipe(
     server({
@@ -87,7 +82,7 @@ gulp.task(
   "default",
   gulp.series(
     "clean",
-    gulp.parallel("html", "sass", "images", 'fonts', 'files'),
+    gulp.parallel("html", "sass", "images", "fonts", "files"),
     gulp.parallel("watch", "server")
   )
 );
