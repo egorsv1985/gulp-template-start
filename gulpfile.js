@@ -30,7 +30,7 @@ const plumberNotify = (title) => {
 
 gulp.task("html", function () {
   return gulp
-    .src("./src/html/**/*.html")
+    .src("./src/**/*.html")
     .pipe(changed("./dist/"))
     .pipe(fileInclude({ fileIncludeSettings }))
     .pipe(gulp.dest("./dist/"))
@@ -79,7 +79,7 @@ gulp.task("scripts", function () {
 });
 
 gulp.task("server", function () {
-  return gulp.src("./dist/pages").pipe(
+  return gulp.src("./dist/").pipe(
     server({
       livereload: true,
       open: true,
