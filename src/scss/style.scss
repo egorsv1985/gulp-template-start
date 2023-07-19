@@ -1,2 +1,11 @@
-@import "./components/header";
-@import "./components/footer";
+
+
+@import "./components/*.scss";
+
+
+header{
+	background-image: url('./../img/options1.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}

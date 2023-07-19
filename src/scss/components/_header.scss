@@ -4,7 +4,11 @@
 	font-size: 30px;
 	color: #fff;
 	text-align: center;
-	@media (min-width: 768px) {
-		font-size: 20px;
-	}
+	display: flex;	
+	transform: scaleX(.5);
+	
 }
+*{
+	box-sizing: border-box;
+}
+
