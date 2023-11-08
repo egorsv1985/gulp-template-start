@@ -1,1 +1,0 @@
-{"version":3,"file":"hello.js","names":["hello","_default","exports"],"sources":["modules/hello.js"],"sourcesContent":["const hello = 'hello world';\r\n\r\nexport default hello;"],"mappings":";;;;;;AAAA,IAAMA,KAAK,GAAG,aAAa;AAAC,IAAAC,QAAA,GAEbD,KAAK;AAAAE,OAAA,cAAAD,QAAA"}

@@ -1,24 +1,33 @@
 const gulp = require("gulp");
-const webp = require("gulp-webp");
-const fileInclude = require("gulp-file-include");
-const webpHTML = require("gulp-webp-html");
-const sass = require("gulp-sass")(require("sass"));
-const sassGlob = require("gulp-sass-glob");
-const server = require("gulp-server-livereload");
-const clean = require("gulp-clean");
-const fs = require("fs");
-const sourcemaps = require("gulp-sourcemaps");
-const groupMedia = require("gulp-group-css-media-queries");
-const autoprefixer = require("gulp-autoprefixer");
-const csso = require("gulp-csso");
-const webpCss = require("gulp-webp-css");
-const plumber = require("gulp-plumber");
-const notify = require("gulp-notify");
-const imagemin = require("gulp-imagemin");
-const changed = require("gulp-changed");
-const gulpIf = require("gulp-if");
-const babel = require("gulp-babel");
-const watch = require("gulp-watch");
+// HTML и шаблоны
+const fileInclude = require("gulp-file-include"); // Позволяет включать содержимое одного файла в другой.
+const webpHTML = require("gulp-webp-html"); // Преобразует изображения в формате WebP для использования в HTML.
+
+// CSS
+const sass = require("gulp-sass")(require("sass")); // Компилирует файлы SASS в CSS.
+const sassGlob = require("gulp-sass-glob"); // Позволяет использовать глобальные шаблоны при компиляции SASS.
+const groupMedia = require("gulp-group-css-media-queries"); // Группирует медиа-запросы в CSS.
+const autoprefixer = require("gulp-autoprefixer"); // Добавляет вендорные префиксы к CSS.
+const csso = require("gulp-csso"); // Минифицирует CSS-код.
+const webpCss = require("gulp-webp-css"); // Заменяет ссылки на изображения на их эквиваленты в формате WebP в CSS.
+
+// JavaScript
+const babel = require("gulp-babel"); // Транспилирует современный JavaScript в более старый синтаксис для обеспечения кросс-браузерной совместимости.
+
+// Изображения
+// const webp = require("gulp-webp"); // Конвертирует изображения в формате WebP.
+const imagemin = require("gulp-imagemin"); // Сжимает изображения.
+const changed = require("gulp-changed"); // Позволяет сжимать только изменившиеся изображения.
+
+// Общие операции
+const server = require("gulp-server-livereload"); // Запускает локальный сервер с поддержкой автоматической перезагрузки при изменении файлов.
+const clean = require("gulp-clean"); // Удаляет файлы и папки.
+const fs = require("fs"); // Модуль Node.js для работы с файловой системой.
+const sourcemaps = require("gulp-sourcemaps"); // Создает карты источников для CSS и JavaScript.
+const plumber = require("gulp-plumber"); // Предотвращает прерывание выполнения задач Gulp при ошибках.
+const notify = require("gulp-notify"); // Отправляет уведомления о результатах выполнения задач Gulp.
+const gulpIf = require("gulp-if"); // Позволяет выполнять задачи Gulp на основе условий.
+const watch = require("gulp-watch"); // Отслеживает изменения файлов и запускает задачи Gulp при их изменении.
 
 const fileIncludeSettings = {
   prefix: "@@",
