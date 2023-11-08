@@ -6,11 +6,8 @@ const server = require("gulp-server-livereload");
 const clean = require("gulp-clean");
 const fs = require("fs");
 const sourcemaps = require("gulp-sourcemaps");
-
 const plumber = require("gulp-plumber");
 const notify = require("gulp-notify");
-const webpack = require("webpack-stream");
-const babel = require("gulp-babel");
 const imagemin = require("gulp-imagemin");
 const changed = require("gulp-changed");
 
@@ -32,7 +29,7 @@ const plumberNotify = (title) => {
 gulp.task("html:dev", function () {
   return gulp
     .src(["./src/**/*.html", "!./src/html/components/*.html"])
-    .pipe(changed("./build/", { hasChanged: changed.compareContents}))
+    .pipe(changed("./build/", { hasChanged: changed.compareContents }))
     .pipe(fileInclude({ fileIncludeSettings }))
     .pipe(gulp.dest("./build/"))
     .pipe(plumber(plumberNotify("HTML")));
@@ -58,21 +55,22 @@ gulp.task("images:dev", function () {
     .pipe(gulp.dest("./build/img/"));
 });
 
-gulp.task("fonts:dev", function () {
-  return gulp.src("./src/fonts/**/*.*")
-  .pipe(changed("./build/fonts/"))
-  .pipe(gulp.dest("./build/fonts/"));
-});
+// gulp.task("fonts:dev", function () {
+//   return gulp.src("./src/fonts/**/*.*")
+//   .pipe(changed("./build/fonts/"))
+//   .pipe(gulp.dest("./build/fonts/"));
+// });
 gulp.task("files:dev", function () {
-  return gulp.src("./src/files/**/*.*")
-  .pipe(changed("./build/files/"))
-  .pipe(gulp.dest("./build/files/"));
+  return gulp
+    .src("./src/files/**/*.*")
+    .pipe(changed("./build/files/"))
+    .pipe(gulp.dest("./build/files/"));
 });
 
 gulp.task("scripts:dev", function () {
   return gulp
     .src("./src/js/**/*.js")
-	.pipe(changed("./build/js/"))
+    .pipe(changed("./build/js/"))
     .pipe(plumber(plumberNotify("JS")))
     .pipe(babel())
     .pipe(webpack(require("./../webpack.config")))
@@ -99,8 +97,7 @@ gulp.task("watch:dev", function () {
   gulp.watch("./src/scss/**/*.scss", gulp.parallel("sass:dev"));
   gulp.watch("./src/html/**/*.html", gulp.parallel("html:dev"));
   gulp.watch("./src/img/**/*", gulp.parallel("images:dev"));
-  gulp.watch("./src/fonts/**/*", gulp.parallel("fonts:dev"));
+  // gulp.watch("./src/fonts/**/*", gulp.parallel("fonts:dev"));
   gulp.watch("./src/files/**/*", gulp.parallel("files:dev"));
   gulp.watch("./src/js/**/*.js", gulp.parallel("scripts:dev"));
 });
-

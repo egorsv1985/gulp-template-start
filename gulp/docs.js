@@ -1,7 +1,5 @@
 const gulp = require("gulp");
 const fileInclude = require("gulp-file-include");
-
-// SASS
 const sass = require("gulp-sass")(require("sass"));
 const sassGlob = require("gulp-sass-glob");
 const server = require("gulp-server-livereload");
@@ -11,17 +9,10 @@ const sourcemaps = require("gulp-sourcemaps");
 const groupMedia = require("gulp-group-css-media-queries");
 const autoprefixer = require("gulp-autoprefixer");
 const csso = require("gulp-csso");
-const webpCss = require('gulp-webp-css');
+const webpCss = require("gulp-webp-css");
 const plumber = require("gulp-plumber");
 const notify = require("gulp-notify");
-const webpack = require("webpack-stream");
-const babel = require("gulp-babel");
-
-// images
-
 const webp = require("gulp-webp");
-const webpHTML = require('gulp-webp-html');
-const imagemin = require("gulp-imagemin");
 const changed = require("gulp-changed");
 
 const fileIncludeSettings = {
@@ -77,12 +68,12 @@ gulp.task("images:docs", function () {
     .pipe(gulp.dest("./docs/img/"));
 });
 
-gulp.task("fonts:docs", function () {
-  return gulp
-    .src("./src/fonts/**/*.*")
-    .pipe(changed("./docs/fonts/"))
-    .pipe(gulp.dest("./docs/fonts/"));
-});
+// gulp.task("fonts:docs", function () {
+//   return gulp
+//     .src("./src/fonts/**/*.*")
+//     .pipe(changed("./docs/fonts/"))
+//     .pipe(gulp.dest("./docs/fonts/"));
+// });
 gulp.task("files:docs", function () {
   return gulp
     .src("./src/files/**/*.*")
