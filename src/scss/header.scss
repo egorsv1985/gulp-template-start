@@ -1,4 +1,9 @@
 .header {
   z-index: 999;
-  background-color: #157415;
+  background-color: #a8986b;
+}
+@media (min-width: 768px) {
+  .header {
+    background-color: #a8986b;
+  }
 }
