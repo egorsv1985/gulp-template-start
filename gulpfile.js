@@ -20,7 +20,7 @@ const imagemin = require("gulp-imagemin"); // Сжимает изображен�
 const changed = require("gulp-changed"); // Позволяет сжимать только изменившиеся изображения.
 
 // Общие операции
-const server = require("gulp-server-livereload"); // Запускает локальный сервер с поддержкой автоматической перезагрузки при изменении файлов.
+const server = require("browser-sync").create(); // Запускает локальный сервер
 const clean = require("gulp-clean"); // Удаляет файлы и папки.
 const fs = require("fs"); // Модуль Node.js для работы с файловой системой.
 const sourcemaps = require("gulp-sourcemaps"); // Создает карты источников для CSS и JavaScript.
@@ -93,11 +93,13 @@ function sassTask(dest) {
 
 // Images tasks
 function imagesTask(dest) {
-  return gulp
-    .src(paths.src.images)
-    .pipe(gulpIf(isProduction, webp()))
-    .pipe(gulpIf(isProduction, imagemin({ verbose: true })))
-    .pipe(gulp.dest(dest + "img/"));
+  return (
+    gulp
+      .src(paths.src.images)
+      // .pipe(gulpIf(isProduction, webp()))
+      .pipe(gulpIf(isProduction, imagemin({ verbose: true })))
+      .pipe(gulp.dest(dest + "img/"))
+  );
 }
 
 // Files task
@@ -123,16 +125,17 @@ function cleanTask(dest) {
 
 // Server task
 function serverTask(dest) {
-  return gulp.src(dest).pipe(
-    server({
-      livereload: true,
-      open: true,
-    })
-  );
+  server.init({
+    server: {
+      baseDir: dest,
+    },
+    notify: false,
+  });
+
+  watch(dest + "**/*").on("change", server.reload);
 }
 
 // Watch task
-
 function watchTask() {
   watch("./src/**/*.html", gulp.series(htmlTask.bind(null, paths.dest.dev)));
   watch(paths.src.sass, gulp.series(sassTask.bind(null, paths.dest.dev)));
@@ -153,8 +156,7 @@ gulp.task(
       filesTask.bind(null, paths.dest.dev),
       scriptsTask.bind(null, paths.dest.dev)
     ),
-    serverTask.bind(null, paths.dest.dev),
-    watchTask
+    gulp.parallel(serverTask.bind(null, paths.dest.dev), watchTask)
   )
 );
 
@@ -185,7 +187,6 @@ gulp.task(
       filesTask.bind(null, paths.dest.dev),
       scriptsTask.bind(null, paths.dest.dev)
     ),
-    serverTask.bind(null, paths.dest.dev),
-    watchTask
+    gulp.parallel(serverTask.bind(null, paths.dest.dev), watchTask)
   )
 );
