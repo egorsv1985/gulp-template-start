@@ -1,5 +1,4 @@
 @charset "UTF-8";
-
 /* -----------------------------------------------------------------
                        @media
 1-ый параметр $min-max принимает 3 аргумента min, max, min-max.
@@ -22,18 +21,15 @@
    @include media(min, 870px,) { display: none;}
    @include media(min-max, 870px, 1000px) { display: none;}
 --------------------------------------------------------------------*/
-
 .wrapper {
   min-height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
-
 .wrapper > main {
   flex: 1 1 auto;
 }
-
 .wrapper > * {
   min-width: 0;
 }
@@ -44,7 +40,6 @@
 Например header__container, main__container и т.д.
 Снипет (HTML): cnt
 */
-
 [class*=__container] {
   max-width: 72.5rem;
   box-sizing: content-box;
@@ -123,7 +118,6 @@
 [class*=-ibg] {
   position: relative;
 }
-
 [class*=-ibg] img {
   position: absolute;
   width: 100%;
@@ -142,19 +136,19 @@
   background-color: #a8986b;
 }
 
+@media (min-width: 768px) {
+  .header {
+    background-color: #a8986b;
+  }
+}
 .footer {
   background-color: #f6f3ee;
 }
-
 .footer__link {
   background: url("@img/icons/place.svg") no-repeat center/cover;
 }
 
 @media (min-width: 768px) {
-  .header {
-    background-color: #a8986b;
-  }
-
   .footer {
     background-color: #a8986b;
   }
