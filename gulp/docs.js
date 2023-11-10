@@ -17,6 +17,8 @@ const autoprefixer = require("gulp-autoprefixer");
 const csso = require("gulp-csso");
 const htmlclean = require("gulp-htmlclean");
 const webp = require("gulp-webp");
+const webpHTML = require("gulp-webp-html");
+const webpCss = require("gulp-webp-css");
 
 const fileIncludeSettings = {
   prefix: "@@",
@@ -56,6 +58,7 @@ gulp.task("html:docs", function () {
     .pipe(changed("./docs/"))
     .pipe(plumber(plumberNotify("HTML")))
     .pipe(fileInclude(fileIncludeSettings))
+    .pipe(webpHTML())
     .pipe(htmlclean())
     .pipe(gulp.dest("./docs/"));
 });
@@ -68,6 +71,7 @@ gulp.task("sass:docs", function () {
     .pipe(sourceMaps.init())
     .pipe(autoprefixer(autoprefixerOptions))
     .pipe(sassGlob())
+    .pipe(webpCss())
     .pipe(groupMedia())
     .pipe(sass())
     .pipe(csso())
