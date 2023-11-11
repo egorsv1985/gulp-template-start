@@ -4,9 +4,9 @@
   &__link {
     background: url("@img/icons/place.svg") no-repeat center / cover;
   }
-}
-@media (min-width: 768px) {
-  .footer {
-    background-color: #a8986b;
+  @media (min-width: 768px) {
+    .footer {
+      background-color: #a8986b;
+    }
   }
 }

@@ -1,0 +1,12 @@
+.footer {
+  background-color: #f6f3ee;
+}
+.footer__link {
+  background: url("@img/icons/place.svg") no-repeat center/cover;
+}
+@media (min-width: 768px) {
+  .footer .footer {
+    background-color: #a8986b;
+  }
+}
+/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHMvZm9vdGVyLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRTs7QUFFQTtFQUNFOztBQUVGO0VBQ0U7SUFDRSIsImZpbGUiOiJjb21wb25lbnRzL2Zvb3Rlci5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuZm9vdGVyIHtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjZjZmM2VlO1xyXG5cclxuICAmX19saW5rIHtcclxuICAgIGJhY2tncm91bmQ6IHVybChcIkBpbWcvaWNvbnMvcGxhY2Uuc3ZnXCIpIG5vLXJlcGVhdCBjZW50ZXIgLyBjb3ZlcjtcclxuICB9XHJcbiAgQG1lZGlhIChtaW4td2lkdGg6IDc2OHB4KSB7XHJcbiAgICAuZm9vdGVyIHtcclxuICAgICAgYmFja2dyb3VuZC1jb2xvcjogI2E4OTg2YjtcclxuICAgIH1cclxuICB9XHJcbn1cclxuIl19 */
