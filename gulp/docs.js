@@ -1,49 +1,44 @@
 const gulp = require("gulp");
-const gulpif = require("gulp-if");
+
+// HTML
 const fileInclude = require("gulp-file-include");
+const htmlclean = require("gulp-htmlclean");
+const webpHTML = require("gulp-webp-html");
+
+// SASS
 const sass = require("gulp-sass")(require("sass"));
+const sassGlob = require("gulp-sass-glob");
+const autoprefixer = require("gulp-autoprefixer");
+const csso = require("gulp-csso");
+const webpCss = require("gulp-webp-css");
+
 const server = require("gulp-server-livereload");
 const clean = require("gulp-clean");
 const fs = require("fs");
 const sourceMaps = require("gulp-sourcemaps");
+const groupMedia = require("gulp-group-css-media-queries");
 const plumber = require("gulp-plumber");
 const notify = require("gulp-notify");
 const webpack = require("webpack-stream");
 const babel = require("gulp-babel");
-const imagemin = require("gulp-imagemin");
 const changed = require("gulp-changed");
-const sassGlob = require("gulp-sass-glob");
-const autoprefixer = require("gulp-autoprefixer");
-const csso = require("gulp-csso");
-const htmlclean = require("gulp-htmlclean");
+
+// Images
+const imagemin = require("gulp-imagemin");
 const webp = require("gulp-webp");
-const webpHTML = require("gulp-webp-html");
-const webpCss = require("gulp-webp-css");
-const groupMedia = require("gulp-group-css-media-queries");
 
-// Paths
-const paths = {
-  src: {
-    html: "./src/html/**/*.html",
-    scss: "./src/scss/*.scss",
-    img: "./src/img/**/*",
-    fonts: "./src/fonts/**/*",
-    files: "./src/files/**/*",
-    js: "./src/js/*.js",
-  },
-  dest: {
-    dev: "./build/",
-    build: "./docs/",
-  },
+gulp.task("clean:docs", function (done) {
+  if (fs.existsSync("./docs/")) {
+    return gulp.src("./docs/", { read: false }).pipe(clean({ force: true }));
+  }
+  done();
+});
+
+const fileIncludeSetting = {
+  prefix: "@@",
+  basepath: "@file",
 };
 
-// Server Options
-const serverOptions = {
-  livereload: true,
-  open: true,
-};
-
-// Plumber Notify
 const plumberNotify = (title) => {
   return {
     errorHandler: notify.onError({
@@ -54,162 +49,74 @@ const plumberNotify = (title) => {
   };
 };
 
-// Autoprefixer Options
-const autoprefixerOptions = {
-  grid: true,
-  overrideBrowserslist: ["last 10 versions"],
-  cascade: true,
-};
-
-// Webp Options
-const webpOptions = {
-  verbose: true,
-};
-
-// Gulp task for cleaning
-const cleanTask = function (done) {
-  const targetDir = isDev ? paths.dest.dev : paths.dest.build;
-  if (fs.existsSync(targetDir)) {
-    return gulp.src(targetDir, { read: false }).pipe(clean({ force: true }));
-  }
-  done();
-};
-
-// Gulp task for HTML
-const htmlTask = function () {
+gulp.task("html:docs", function () {
   return gulp
-    .src([paths.src.html, `!${paths.src.html}/components/*.html`])
-    .pipe(changed(isDev ? paths.dest.dev : paths.dest.build))
+    .src(["./src/html/**/*.html", "!./src/html/blocks/*.html"])
+    .pipe(changed("./docs/"))
     .pipe(plumber(plumberNotify("HTML")))
-    .pipe(fileInclude(fileIncludeSettings))
-    .pipe(gulpif(!isDev, webpHTML()))
-    .pipe(gulpif(!isDev, htmlclean()))
-    .pipe(gulp.dest(isDev ? paths.dest.dev : paths.dest.build));
-};
+    .pipe(fileInclude(fileIncludeSetting))
+    .pipe(webpHTML())
+    .pipe(htmlclean())
+    .pipe(gulp.dest("./docs/"));
+});
 
-// Gulp task for SASS
-const sassTask = function () {
+gulp.task("sass:docs", function () {
   return gulp
-    .src(paths.src.scss)
-    .pipe(changed(isDev ? paths.dest.dev + "css/" : paths.dest.build + "css/"))
+    .src("./src/scss/*.scss")
+    .pipe(changed("./docs/css/"))
     .pipe(plumber(plumberNotify("SCSS")))
     .pipe(sourceMaps.init())
-    .pipe(gulpif(!isDev, autoprefixer(autoprefixerOptions)))
-    .pipe(gulpif(!isDev, webpCss()))
-    .pipe(gulpif(!isDev, groupMedia()))
+    .pipe(autoprefixer())
+    .pipe(sassGlob())
+    .pipe(webpCss())
+    .pipe(groupMedia())
     .pipe(sass())
-    .pipe(gulpif(!isDev, csso()))
+    .pipe(csso())
     .pipe(sourceMaps.write())
-    .pipe(
-      gulp.dest(isDev ? paths.dest.dev + "css/" : paths.dest.build + "css/")
-    );
-};
+    .pipe(gulp.dest("./docs/css/"));
+});
 
-// Gulp task for Images
-const imagesTask = function () {
+gulp.task("images:docs", function () {
   return gulp
-    .src(paths.src.img)
-    .pipe(changed(isDev ? paths.dest.dev + "img/" : paths.dest.build + "img/"))
-    .pipe(gulpif(!isDev, webp(webpOptions)))
-    .pipe(
-      gulp.dest(isDev ? paths.dest.dev + "img/" : paths.dest.build + "img/")
-    )
-    .pipe(gulp.src(paths.src.img))
-    .pipe(
-      gulp.dest(isDev ? paths.dest.dev + "img/" : paths.dest.build + "img/")
-    )
-    .pipe(gulpif(!isDev, imagemin({ verbose: true })))
-    .pipe(
-      gulp.dest(isDev ? paths.dest.dev + "img/" : paths.dest.build + "img/")
-    );
-};
+    .src("./src/img/**/*")
+    .pipe(changed("./docs/img/"))
+    .pipe(webp())
+    .pipe(gulp.dest("./docs/img/"))
+    .pipe(gulp.src("./src/img/**/*"))
+    .pipe(changed("./docs/img/"))
+    .pipe(imagemin({ verbose: true }))
+    .pipe(gulp.dest("./docs/img/"));
+});
 
-// Gulp task for Fonts
-const fontsTask = function () {
+gulp.task("fonts:docs", function () {
   return gulp
-    .src(paths.src.fonts)
-    .pipe(
-      changed(isDev ? paths.dest.dev + "fonts/" : paths.dest.build + "fonts/")
-    )
-    .pipe(
-      gulp.dest(isDev ? paths.dest.dev + "fonts/" : paths.dest.build + "fonts/")
-    );
-};
+    .src("./src/fonts/**/*")
+    .pipe(changed("./docs/fonts/"))
+    .pipe(gulp.dest("./docs/fonts/"));
+});
 
-// Gulp task for Files
-const filesTask = function () {
+gulp.task("files:docs", function () {
   return gulp
-    .src(paths.src.files)
-    .pipe(
-      changed(isDev ? paths.dest.dev + "files/" : paths.dest.build + "files/")
-    )
-    .pipe(
-      gulp.dest(isDev ? paths.dest.dev + "files/" : paths.dest.build + "files/")
-    );
-};
+    .src("./src/files/**/*")
+    .pipe(changed("./docs/files/"))
+    .pipe(gulp.dest("./docs/files/"));
+});
 
-// Gulp task for JS
-const jsTask = function () {
+gulp.task("js:docs", function () {
   return gulp
-    .src(paths.src.js)
-    .pipe(changed(isDev ? paths.dest.dev + "js/" : paths.dest.build + "js/"))
+    .src("./src/js/*.js")
+    .pipe(changed("./docs/js/"))
     .pipe(plumber(plumberNotify("JS")))
-    .pipe(webpack(require("../webpack.config.js")))
-    .pipe(gulpif(!isDev, babel()))
-    .pipe(gulp.dest(isDev ? paths.dest.dev + "js/" : paths.dest.build + "js/"));
+    .pipe(babel())
+    .pipe(webpack(require("./../webpack.config.js")))
+    .pipe(gulp.dest("./docs/js/"));
+});
+
+const serverOptions = {
+  livereload: true,
+  open: true,
 };
 
-// Gulp task for Server
-const serverTask = function () {
-  return gulp
-    .src(isDev ? paths.dest.dev : paths.dest.build)
-    .pipe(server(serverOptions));
-};
-
-// Gulp task for Watch
-const watchTask = function () {
-  gulp.watch(paths.src.scss, gulp.parallel("sass"));
-  gulp.watch(paths.src.html, gulp.parallel("html"));
-  gulp.watch(paths.src.img, gulp.parallel("images"));
-  gulp.watch(paths.src.fonts, gulp.parallel("fonts"));
-  gulp.watch(paths.src.files, gulp.parallel("files"));
-  gulp.watch(paths.src.js, gulp.parallel("js"));
-};
-
-// Determine build mode based on npm script
-const isDev = process.env.NODE_ENV === "development";
-
-// File Include Settings
-const fileIncludeSettings = {
-  prefix: "@@",
-  basepath: "@file",
-};
-
-// Default Gulp task
-gulp.task(
-  "default",
-  gulp.series(
-    cleanTask,
-    gulp.parallel("html", "sass", "images", "fonts", "files", "js"),
-    gulp.parallel("server", "watch")
-  )
-);
-
-// Development Gulp task
-gulp.task(
-  "dev",
-  gulp.series(
-    cleanTask,
-    gulp.parallel("html", "sass", "images", "fonts", "files", "js"),
-    gulp.parallel("server", "watch")
-  )
-);
-
-// Production Gulp task
-gulp.task(
-  "build",
-  gulp.series(
-    cleanTask,
-    gulp.parallel("html", "sass", "images", "fonts", "files", "js")
-  )
-);
+gulp.task("server:docs", function () {
+  return gulp.src("./docs/").pipe(server(serverOptions));
+});

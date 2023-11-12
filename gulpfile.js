@@ -11,7 +11,7 @@ const webpack = require("webpack-stream");
 const changed = require("gulp-changed");
 const sassGlob = require("gulp-sass-glob");
 const gulpIf = require("gulp-if");
-const groupMedia = require("gulp-group-css-media-queries");
+const groupMedia = require("gulp-css-mqpacker");
 const babel = require("gulp-babel");
 const imagemin = require("gulp-imagemin");
 const autoprefixer = require("gulp-autoprefixer");
@@ -96,11 +96,11 @@ gulp.task("sass", function () {
     .pipe(changed(destination))
     .pipe(plumber(plumberNotify("SCSS")))
     .pipe(sourceMaps.init())
-    .pipe(gulpIf(isDocs, autoprefixer(autoprefixerOptions)))
+    .pipe(autoprefixer(autoprefixerOptions))
     .pipe(sassGlob())
-    .pipe(gulpIf(isDocs, webpCss()))
-    .pipe(gulpIf(isDocs, groupMedia()))
+    .pipe(webpCss())
     .pipe(sass(sassOptions))
+    .pipe(groupMedia())
     .pipe(gulpIf(isDocs, csso()))
     .pipe(sourceMaps.write())
     .pipe(gulp.dest(destination));
