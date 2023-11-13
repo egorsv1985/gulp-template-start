@@ -15,14 +15,12 @@ const groupMedia = require("gulp-css-mqpacker");
 const babel = require("gulp-babel");
 const imagemin = require("gulp-imagemin");
 const autoprefixer = require("gulp-autoprefixer");
-const csso = require("gulp-csso");
-const htmlclean = require("gulp-htmlclean");
 const webp = require("gulp-webp");
 const webpHTML = require("gulp-webp-html");
 const webpCss = require("gulp-webp-css");
 
 // Constants
-const isDocs = process.env.NODE_ENV === "docs";
+
 const fileIncludeSettings = {
   prefix: "@@",
   basepath: "@file",
@@ -38,7 +36,6 @@ const paths = {
   },
   dest: {
     dev: "./build/",
-    docs: "./docs/",
   },
 };
 const webpackConfig = require("./webpack.config.js");
@@ -66,7 +63,7 @@ const plumberNotify = (title) => {
 };
 // Helper function for clean task
 const cleanTask = function (done) {
-  const destination = isDocs ? paths.dest.docs : paths.dest.dev;
+  const destination = paths.dest.dev;
   if (fs.existsSync(destination)) {
     return gulp.src(destination, { read: false }).pipe(clean({ force: true }));
   }
@@ -75,22 +72,19 @@ const cleanTask = function (done) {
 
 // HTML Task
 gulp.task("html", function () {
-  const destination = isDocs ? paths.dest.docs : paths.dest.dev;
+  const destination = paths.dest.dev;
   return gulp
     .src(paths.src.html)
     .pipe(changed(destination))
     .pipe(plumber(plumberNotify("HTML")))
     .pipe(fileInclude(fileIncludeSettings))
-    .pipe(gulpIf(isDocs, webpHTML()))
-    .pipe(gulpIf(isDocs, htmlclean()))
+    .pipe(webpHTML())
     .pipe(gulp.dest(destination));
 });
 
 // Styles Task
 gulp.task("sass", function () {
-  const destination = isDocs
-    ? paths.dest.docs + "css/"
-    : paths.dest.dev + "css/";
+  const destination = paths.dest.dev + "css/";
   return gulp
     .src(paths.src.scss)
     .pipe(changed(destination))
@@ -101,32 +95,27 @@ gulp.task("sass", function () {
     .pipe(webpCss())
     .pipe(sass(sassOptions))
     .pipe(groupMedia())
-    .pipe(gulpIf(isDocs, csso()))
     .pipe(sourceMaps.write())
     .pipe(gulp.dest(destination));
 });
 
 // Images Task
 gulp.task("images", function () {
-  const destination = isDocs
-    ? paths.dest.docs + "img/"
-    : paths.dest.dev + "img/";
+  const destination = paths.dest.dev + "img/";
   return gulp
     .src(paths.src.img)
     .pipe(changed(destination))
-    .pipe(gulpIf(isDocs, webp()))
+    .pipe(webp())
     .pipe(gulp.dest(destination))
     .pipe(gulp.src(paths.src.img))
     .pipe(gulp.dest(destination))
-    .pipe(gulpIf(isDocs, imagemin({ verbose: true })))
+    .pipe(imagemin({ verbose: true }))
     .pipe(gulp.dest(destination));
 });
 
 // Fonts Task
 gulp.task("fonts", function () {
-  const destination = isDocs
-    ? paths.dest.docs + "fonts/"
-    : paths.dest.dev + "fonts/";
+  const destination = paths.dest.dev + "fonts/";
   return gulp
     .src(paths.src.fonts)
     .pipe(changed(destination))
@@ -135,9 +124,7 @@ gulp.task("fonts", function () {
 
 // Files Task
 gulp.task("files", function () {
-  const destination = isDocs
-    ? paths.dest.docs + "files/"
-    : paths.dest.dev + "files/";
+  const destination = paths.dest.dev + "files/";
   return gulp
     .src(paths.src.files)
     .pipe(changed(destination))
@@ -146,7 +133,7 @@ gulp.task("files", function () {
 
 // JavaScript Task
 gulp.task("js", function () {
-  const destination = isDocs ? paths.dest.docs + "js/" : paths.dest.dev + "js/";
+  const destination = paths.dest.dev + "js/";
   return gulp
     .src(paths.src.js)
     .pipe(changed(destination))
@@ -158,7 +145,7 @@ gulp.task("js", function () {
 
 // Server Task
 gulp.task("server", function () {
-  const destination = isDocs ? paths.dest.docs : paths.dest.dev;
+  const destination = paths.dest.dev;
   return gulp.src(destination).pipe(server(serverOptions));
 });
 
