@@ -27,7 +27,7 @@ const paths = {
   src: {
     html: ["./src/html/**/*.html", "!./src/html/components/*.html"],
     scss: "./src/scss/**/*.scss",
-    img: "./src/img/**/*",
+    images: "./src/images/**/*",
     fonts: "./src/fonts/**/*",
     files: "./src/files/**/*",
     js: "./src/js/*.js",
@@ -99,13 +99,13 @@ gulp.task("sass", function () {
 
 // Images Task
 gulp.task("images", function () {
-  const destination = paths.dest.dev + "img/";
+  const destination = paths.dest.dev + "images/";
   return gulp
-    .src(paths.src.img)
+    .src(paths.src.images)
     .pipe(changed(destination))
     .pipe(webp())
     .pipe(gulp.dest(destination))
-    .pipe(gulp.src(paths.src.img))
+    .pipe(gulp.src(paths.src.images))
     .pipe(gulp.dest(destination))
     .pipe(imagemin({ verbose: true }))
     .pipe(gulp.dest(destination));
@@ -150,7 +150,7 @@ gulp.task("server", function () {
 gulp.task("watch", function () {
   gulp.watch(paths.src.scss, gulp.parallel("sass"));
   gulp.watch(paths.src.html, gulp.parallel("html"));
-  gulp.watch(paths.src.img, gulp.parallel("images"));
+  gulp.watch(paths.src.images, gulp.parallel("images"));
   gulp.watch(paths.src.fonts, gulp.parallel("fonts"));
   gulp.watch(paths.src.files, gulp.parallel("files"));
   gulp.watch(paths.src.js, gulp.parallel("js"));

@@ -1,0 +1,10 @@
+.footer {
+  background-color: #f6f3ee;
+}
+
+.header {
+  z-index: 999;
+  background-color: #1f56e0;
+  display: flex;
+}
+/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudHMvZm9vdGVyLnNjc3MiLCJjb21wb25lbnRzL2hlYWRlci5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0U7OztBQ0RGO0VBQ0U7RUFDQTtFQUNBIiwiZmlsZSI6InRlbXBsYXRlX3N0eWxlcy5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuZm9vdGVyIHtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjZjZmM2VlO1xyXG59XHJcbiIsIi5oZWFkZXIge1xyXG4gIHotaW5kZXg6IDk5OTtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjMWY1NmUwO1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbn1cclxuIl19 */
