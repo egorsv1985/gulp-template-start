@@ -16,7 +16,6 @@ const webp = require("gulp-webp");
 const webpHTML = require("gulp-webp-html");
 const webpCss = require("gulp-webp-css");
 const concat = require("gulp-concat");
-const svgSprite = require("gulp-svg-sprite");
 
 // Constants
 
@@ -34,7 +33,7 @@ const paths = {
     js: "./src/js/*.js",
   },
   dest: {
-    dev: "./build/",
+    dev: "./docs/",
   },
 };
 
@@ -111,13 +110,7 @@ gulp.task("images", function () {
     .pipe(imagemin({ verbose: true }))
     .pipe(gulp.dest(destination));
 });
-gulp.task("svg-sprite", function () {
-  const destination = paths.dest.dev + "img/sprite/";
-  return gulp
-    .src("src/img/icons/**/*.svg")
-    .pipe(svgSprite())
-    .pipe(gulp.dest(destination));
-});
+
 // Fonts Task
 gulp.task("fonts", function () {
   const destination = paths.dest.dev + "fonts/";
@@ -158,7 +151,6 @@ gulp.task("watch", function () {
   gulp.watch(paths.src.scss, gulp.parallel("sass"));
   gulp.watch(paths.src.html, gulp.parallel("html"));
   gulp.watch(paths.src.img, gulp.parallel("images"));
-  gulp.watch(paths.src.img, gulp.parallel("svg-sprite"));
   gulp.watch(paths.src.fonts, gulp.parallel("fonts"));
   gulp.watch(paths.src.files, gulp.parallel("files"));
   gulp.watch(paths.src.js, gulp.parallel("js"));
@@ -169,15 +161,7 @@ gulp.task(
   "build",
   gulp.series(
     cleanTask,
-    gulp.parallel(
-      "html",
-      "sass",
-      "images",
-      "svg-sprite",
-      "fonts",
-      "files",
-      "js"
-    )
+    gulp.parallel("html", "sass", "images", "fonts", "files", "js")
   )
 );
 
