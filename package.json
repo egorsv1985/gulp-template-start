@@ -11,6 +11,7 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.23.3",
+    "@babel/plugin-transform-modules-umd": "^7.23.3",
     "@babel/preset-env": "^7.23.3",
     "css-loader": "^6.8.1",
     "glob": "^10.3.10",
@@ -19,6 +20,7 @@
     "gulp-babel": "^8.0.0",
     "gulp-changed": "^4.0.3",
     "gulp-clean": "^0.4.0",
+    "gulp-concat": "^2.6.1",
     "gulp-css-mqpacker": "^1.0.1",
     "gulp-csso": "^4.0.1",
     "gulp-file-include": "^2.3.0",
@@ -32,6 +34,7 @@
     "gulp-sass-glob": "^1.1.0",
     "gulp-server-livereload": "^1.9.2",
     "gulp-sourcemaps": "^3.0.0",
+    "gulp-svg-sprite": "^2.0.3",
     "gulp-webp": "^4.0.1",
     "gulp-webp-css": "^1.1.0",
     "gulp-webp-html": "^1.0.2",

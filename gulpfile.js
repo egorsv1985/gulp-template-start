@@ -7,17 +7,16 @@ const fs = require("fs");
 const sourceMaps = require("gulp-sourcemaps");
 const plumber = require("gulp-plumber");
 const notify = require("gulp-notify");
-const webpack = require("webpack-stream");
 const changed = require("gulp-changed");
 const sassGlob = require("gulp-sass-glob");
-const gulpIf = require("gulp-if");
 const groupMedia = require("gulp-css-mqpacker");
-const babel = require("gulp-babel");
 const imagemin = require("gulp-imagemin");
 const autoprefixer = require("gulp-autoprefixer");
 const webp = require("gulp-webp");
 const webpHTML = require("gulp-webp-html");
 const webpCss = require("gulp-webp-css");
+const concat = require("gulp-concat");
+const svgSprite = require("gulp-svg-sprite");
 
 // Constants
 
@@ -38,7 +37,7 @@ const paths = {
     dev: "./build/",
   },
 };
-const webpackConfig = require("./webpack.config.js");
+
 const sassOptions = {
   includePaths: ["./node_modules"],
 };
@@ -112,7 +111,13 @@ gulp.task("images", function () {
     .pipe(imagemin({ verbose: true }))
     .pipe(gulp.dest(destination));
 });
-
+gulp.task("svg-sprite", function () {
+  const destination = paths.dest.dev + "img/sprite/";
+  return gulp
+    .src("src/img/icons/**/*.svg")
+    .pipe(svgSprite())
+    .pipe(gulp.dest(destination));
+});
 // Fonts Task
 gulp.task("fonts", function () {
   const destination = paths.dest.dev + "fonts/";
@@ -138,8 +143,7 @@ gulp.task("js", function () {
     .src(paths.src.js)
     .pipe(changed(destination))
     .pipe(plumber(plumberNotify("JS")))
-    .pipe(webpack(webpackConfig))
-    .pipe(babel())
+    .pipe(concat("app.js"))
     .pipe(gulp.dest(destination));
 });
 
@@ -154,6 +158,7 @@ gulp.task("watch", function () {
   gulp.watch(paths.src.scss, gulp.parallel("sass"));
   gulp.watch(paths.src.html, gulp.parallel("html"));
   gulp.watch(paths.src.img, gulp.parallel("images"));
+  gulp.watch(paths.src.img, gulp.parallel("svg-sprite"));
   gulp.watch(paths.src.fonts, gulp.parallel("fonts"));
   gulp.watch(paths.src.files, gulp.parallel("files"));
   gulp.watch(paths.src.js, gulp.parallel("js"));
@@ -164,7 +169,15 @@ gulp.task(
   "build",
   gulp.series(
     cleanTask,
-    gulp.parallel("html", "sass", "images", "fonts", "files", "js")
+    gulp.parallel(
+      "html",
+      "sass",
+      "images",
+      "svg-sprite",
+      "fonts",
+      "files",
+      "js"
+    )
   )
 );
 
