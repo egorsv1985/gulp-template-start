@@ -18,6 +18,7 @@ const webpCss = require("gulp-webp-css");
 const concat = require("gulp-concat");
 
 // Constants
+const isProduction = process.env.NODE_ENV === "production";
 
 const fileIncludeSettings = {
   prefix: "@@",
@@ -26,7 +27,7 @@ const fileIncludeSettings = {
 const paths = {
   src: {
     html: ["./src/html/**/*.html", "!./src/html/components/*.html"],
-    scss: "./src/scss/**/*.scss",
+    scss: ["./src/scss/**/*.scss", "!./src/scss/components/*.scss"],
     images: "./src/images/**/*",
     fonts: "./src/fonts/**/*",
     files: "./src/files/**/*",
