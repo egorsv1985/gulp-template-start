@@ -2,5 +2,47 @@
 	z-index: 999;
 	background-color: #66a553;
 	display: flex;
+	gap: 20px;
 	color: #000;
+	background: url('@img/services.png') no-repeat center / cover;
+}
+
+/* Медиа-запрос для устройств с максимальной шириной 768px (например, мобильные устройства) */
+@media only screen and (max-width: 768px) {
+	.header {
+		/* Ваши стили для экранов шириной до 768px */
+		background-color: #ffcc00; /* Рандомный цвет для примера */
+	}
+}
+
+/* Медиа-запрос для устройств с минимальной шириной 769px (например, планшеты и выше) */
+@media only screen and (min-width: 769px) {
+	.header {
+		/* Ваши стили для экранов шириной от 769px и выше */
+		background-color: #3366cc; /* Другой рандомный цвет для примера */
+	}
+}
+.nav {
+	/* Общие стили для .nav */
+	font-size: 16px;
+	font-weight: normal;
+	color: #333;
+}
+
+/* Медиа-запрос для устройств с максимальной шириной 768px (например, мобильные устройства) */
+@media only screen and (max-width: 768px) {
+	.nav {
+		/* Стили для .nav на экранах шириной до 768px */
+		font-size: 14px;
+		color: #ff9900; /* Рандомный цвет текста для примера */
+	}
+}
+
+/* Медиа-запрос для устройств с минимальной шириной 769px (например, планшеты и выше) */
+@media only screen and (min-width: 769px) {
+	.nav {
+		/* Стили для .nav на экранах шириной от 769px и выше */
+		font-size: 18px;
+		color: #3366cc; /* Другой рандомный цвет текста для примера */
+	}
 }

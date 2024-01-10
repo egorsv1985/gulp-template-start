@@ -1,5 +1,3 @@
-
-
 $(document).ready(function () {
 	// Проверяем поддержку формата WebP
 	function supportsWebP() {

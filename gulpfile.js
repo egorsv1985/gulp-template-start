@@ -1,7 +1,6 @@
 const gulp = require('gulp')
 const fileInclude = require('gulp-file-include')
 const sass = require('gulp-sass')(require('sass'))
-const server = require('gulp-server-livereload')
 const clean = require('gulp-clean')
 const fs = require('fs')
 const sourceMaps = require('gulp-sourcemaps')
@@ -14,10 +13,13 @@ const imagemin = require('gulp-imagemin')
 const autoprefixer = require('gulp-autoprefixer')
 const webp = require('gulp-webp')
 const webpHTML = require('gulp-webp-html')
-const webpCss = require('gulp-webp-css')
+
+const webImagesCSS = require('gulp-web-images-css')
 const concat = require('gulp-concat')
 const browserSync = require('browser-sync').create()
 const filter = require('gulp-filter')
+const gulpIf = require('gulp-if')
+const replace = require('gulp-replace')
 
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
@@ -26,6 +28,7 @@ const fileIncludeSettings = {
 	prefix: '@@',
 	basepath: '@file',
 }
+
 const paths = {
 	src: {
 		html: './src/html/**/*.html',
@@ -33,21 +36,28 @@ const paths = {
 		images: './src/images/**/*',
 		fonts: './src/fonts/**/*',
 		files: './src/files/**/*',
-		js: './src/js/*.js',
+		js: './src/js/**/*.js',
 	},
 	dest: {
 		dev: './docs/',
+	},
+	img: {
+		html: './images',
+		css: '../images',
+		js: '../images',
 	},
 }
 
 const sassOptions = {
 	includePaths: ['./node_modules'],
 }
+
 const autoprefixerOptions = {
 	grid: true,
-	overrideBrowserslist: ['last 10 versions'],
+	overrideBrowserslist: ['last 3 versions'],
 	cascade: true,
 }
+
 const serverOptions = {
 	server: {
 		baseDir: paths.dest.dev,
@@ -87,11 +97,12 @@ gulp.task('html', function () {
 		.pipe(changed(destination))
 		.pipe(plumber(plumberNotify('HTML')))
 		.pipe(fileInclude(fileIncludeSettings))
-		.pipe(webpHTML())
-		.pipe(filterHTML) // Используем фильтр
+		.pipe(gulpIf(isProduction, webpHTML()))
+		.pipe(replace('@img', paths.img.html))
+		.pipe(filterHTML)
 		.pipe(gulp.dest(destination))
-		.pipe(filterHTML.restore) // Восстанавливаем оригинальный поток
-		.pipe(browserSync.stream()) // Обновление браузера
+		.pipe(filterHTML.restore)
+		.pipe(browserSync.stream())
 })
 
 // Styles Task
@@ -100,21 +111,23 @@ gulp.task('sass', function () {
 	const filterScss = filter(['**/*', '!src/scss/**/_*.scss'], {
 		restore: true,
 	})
+
 	return gulp
 		.src(paths.src.scss)
 		.pipe(changed(destination))
 		.pipe(plumber(plumberNotify('SCSS')))
 		.pipe(sourceMaps.init())
-		.pipe(autoprefixer(autoprefixerOptions))
+		.pipe(gulpIf(isProduction, autoprefixer(autoprefixerOptions)))
 		.pipe(sassGlob())
-		.pipe(webpCss())
 		.pipe(sass(sassOptions))
-		.pipe(groupMedia())
+		.pipe(gulpIf(isProduction, groupMedia()))
+		.pipe(replace('@img', paths.img.css))
+		.pipe(gulpIf(isProduction, webImagesCSS({ mode: 'all' })))
 		.pipe(sourceMaps.write())
 		.pipe(filterScss)
 		.pipe(gulp.dest(destination))
 		.pipe(filterScss.restore)
-		.pipe(browserSync.stream()) // Обновление браузера
+		.pipe(browserSync.stream())
 })
 
 // Images Task
@@ -160,6 +173,7 @@ gulp.task('js', function () {
 		.src(paths.src.js)
 		.pipe(changed(destination))
 		.pipe(plumber(plumberNotify('JS')))
+		.pipe(replace('@img', paths.img.js))
 		.pipe(concat('app.js'))
 		.pipe(gulp.dest(destination))
 		.pipe(browserSync.stream()) // Обновление браузера
@@ -185,7 +199,8 @@ gulp.task(
 	'build',
 	gulp.series(
 		cleanTask,
-		gulp.parallel('html', 'sass', 'images', 'fonts', 'files', 'js')
+		gulp.parallel('html', 'sass', 'images', 'fonts', 'files', 'js'),
+		'server'
 	)
 )
 
