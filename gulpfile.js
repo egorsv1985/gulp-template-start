@@ -13,16 +13,19 @@ const imagemin = require('gulp-imagemin')
 const autoprefixer = require('gulp-autoprefixer')
 const webp = require('gulp-webp')
 const webpHTML = require('gulp-webp-html')
-
 const webImagesCSS = require('gulp-web-images-css')
 const concat = require('gulp-concat')
 const browserSync = require('browser-sync').create()
 const filter = require('gulp-filter')
 const gulpIf = require('gulp-if')
 const replace = require('gulp-replace')
+const zip = require('gulp-zip')
 
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
+
+const packageJson = require('./package.json')
+const projectName = packageJson.name
 
 const fileIncludeSettings = {
 	prefix: '@@',
@@ -136,12 +139,12 @@ gulp.task('images', function () {
 	return gulp
 		.src(paths.src.images)
 		.pipe(changed(destination))
-		.pipe(webp())
+		.pipe(gulpIf(isProduction, webp()))
 		.pipe(gulp.dest(destination))
 		.pipe(gulp.src(paths.src.images))
 		.pipe(changed(destination))
 		.pipe(gulp.dest(destination))
-		.pipe(imagemin({ verbose: true }))
+		.pipe(gulpIf(isProduction, imagemin({ verbose: true })))
 		.pipe(gulp.dest(destination))
 		.pipe(browserSync.stream()) // Обновление браузера
 })
@@ -179,6 +182,17 @@ gulp.task('js', function () {
 		.pipe(browserSync.stream()) // Обновление браузера
 })
 
+// Archive Task
+gulp.task('archive', function () {
+	const source = paths.dest.dev + '**/*'
+	const destination = './'
+
+	return gulp
+		.src(source)
+		.pipe(zip(`${projectName}.zip`))
+		.pipe(gulp.dest(destination))
+})
+
 // Server Task
 gulp.task('server', function () {
 	browserSync.init(serverOptions)
@@ -199,10 +213,12 @@ gulp.task(
 	'build',
 	gulp.series(
 		cleanTask,
-		gulp.parallel('html', 'sass', 'images', 'fonts', 'files', 'js'),
-		'server'
+		gulp.parallel('html', 'sass', 'images', 'fonts', 'files', 'js')
 	)
 )
+
+// Zip Task
+gulp.task('zip', gulp.series('build', 'archive'))
 
 // Default Task
 gulp.task('default', gulp.series('build', gulp.parallel('server', 'watch')))

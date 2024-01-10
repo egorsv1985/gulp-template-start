@@ -6,7 +6,8 @@
 	"scripts": {
 		"dev": "gulp --dev",
 		"build": "gulp build",
-		"docs": "set NODE_ENV=production&&npm run build"
+		"docs": "set NODE_ENV=production&&npm run build",
+		"zip": "gulp archive"
 	},
 	"author": "Egor Sabancev",
 	"license": "ISC",
@@ -37,6 +38,7 @@
 		"gulp-webp": "^4.0.1",
 		"gulp-webp-css": "^1.1.0",
 		"gulp-webp-html": "^1.0.2",
+		"gulp-zip": "^5.1.0",
 		"sass": "^1.69.5"
 	}
 }
