@@ -9,9 +9,8 @@ const notify = require('gulp-notify')
 const changed = require('gulp-changed')
 const sassGlob = require('gulp-sass-glob')
 const groupMedia = require('gulp-css-mqpacker')
-const postcss = require('gulp-postcss')
 const imagemin = require('gulp-imagemin')
-// const autoprefixer = require('gulp-autoprefixer')
+const autoprefixer = require('gulp-autoprefixer')
 const webp = require('gulp-webp')
 const webpHTML = require('gulp-webp-html')
 const webImagesCSS = require('gulp-web-images-css')
@@ -58,7 +57,7 @@ const sassOptions = {
 
 const autoprefixerOptions = {
 	grid: true,
-	overrideBrowserslist: ['last 8 versions'],
+	overrideBrowserslist: ['last 3 versions'],
 	cascade: true,
 }
 
@@ -116,25 +115,22 @@ gulp.task('sass', function () {
 		restore: true,
 	})
 
-	return (
-		gulp
-			.src(paths.src.scss)
-			.pipe(changed(destination))
-			.pipe(plumber(plumberNotify('SCSS')))
-			.pipe(sourceMaps.init())
-			// .pipe(gulpIf(isProduction, autoprefixer(autoprefixerOptions)))
-			.pipe(sassGlob())
-			.pipe(sass(sassOptions))
-			// .pipe(gulpIf(isProduction, groupMedia()))
-			.pipe(replace('@img', paths.img.css))
-			.pipe(postcss())
-			.pipe(gulpIf(isProduction, webImagesCSS({ mode: 'all' })))
-			.pipe(sourceMaps.write())
-			.pipe(filterScss)
-			.pipe(gulp.dest(destination))
-			.pipe(filterScss.restore)
-			.pipe(browserSync.stream())
-	)
+	return gulp
+		.src(paths.src.scss)
+		.pipe(changed(destination))
+		.pipe(plumber(plumberNotify('SCSS')))
+		.pipe(sourceMaps.init())
+		.pipe(gulpIf(isProduction, autoprefixer(autoprefixerOptions)))
+		.pipe(sassGlob())
+		.pipe(sass(sassOptions))
+		.pipe(gulpIf(isProduction, groupMedia()))
+		.pipe(replace('@img', paths.img.css))
+		.pipe(gulpIf(isProduction, webImagesCSS({ mode: 'all' })))
+		.pipe(sourceMaps.write())
+		.pipe(filterScss)
+		.pipe(gulp.dest(destination))
+		.pipe(filterScss.restore)
+		.pipe(browserSync.stream())
 })
 
 // Images Task

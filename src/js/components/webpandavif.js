@@ -27,10 +27,10 @@ $(document).ready(function () {
 
 	// Добавляем классы в зависимости от поддержки форматов
 	if (supportsWebP()) {
-		$('html').addClass('webp')
+		$('body').addClass('webp')
 	}
 
 	if (supportsAvif()) {
-		$('html').addClass('avif')
+		$('body').addClass('avif')
 	}
 })

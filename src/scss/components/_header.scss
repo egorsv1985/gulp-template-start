@@ -3,8 +3,11 @@
 	background-color: #66a553;
 	display: flex;
 	gap: 20px;
-	color: #000;
+	color: #b86868b4;
+	font-size: 30px;
+	transform: rotate(15deg);
 	background: url('@img/services.png') no-repeat center / cover;
+	animation-name: bounce;
 }
 
 /* Медиа-запрос для устройств с максимальной шириной 768px (например, мобильные устройства) */
@@ -14,7 +17,12 @@
 		background-color: #ffcc00; /* Рандомный цвет для примера */
 	}
 }
-
+.body {
+	color: #000;
+}
+.components {
+	color: #000;
+}
 /* Медиа-запрос для устройств с минимальной шириной 769px (например, планшеты и выше) */
 @media only screen and (min-width: 769px) {
 	.header {
@@ -26,7 +34,7 @@
 	/* Общие стили для .nav */
 	font-size: 16px;
 	font-weight: normal;
-	color: #333;
+	color: #a33b3b;
 }
 
 /* Медиа-запрос для устройств с максимальной шириной 768px (например, мобильные устройства) */

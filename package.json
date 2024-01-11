@@ -12,7 +12,10 @@
 	"author": "Egor Sabancev",
 	"license": "ISC",
 	"devDependencies": {
+		"autoprefixer": "^10.4.16",
 		"browser-sync": "^3.0.2",
+		"css-mqpacker": "^7.0.0",
+		"cssnano": "^6.0.3",
 		"del": "^6.0.0",
 		"glob": "^10.3.10",
 		"gulp": "^4.0.2",
@@ -29,6 +32,7 @@
 		"gulp-imagemin": "^7.1.0",
 		"gulp-notify": "^4.0.0",
 		"gulp-plumber": "^1.2.1",
+		"gulp-postcss": "^9.0.1",
 		"gulp-replace": "^1.1.4",
 		"gulp-sass": "^5.1.0",
 		"gulp-sass-glob": "^1.1.0",
@@ -39,6 +43,17 @@
 		"gulp-webp-css": "^1.1.0",
 		"gulp-webp-html": "^1.0.2",
 		"gulp-zip": "^5.1.0",
-		"sass": "^1.69.5"
+		"postcss": "^8.4.33",
+		"postcss-animation": "^0.0.12",
+		"postcss-flexbugs-fixes": "^5.0.2",
+		"postcss-nested": "^6.0.1",
+		"postcss-preset-env": "^9.3.0",
+		"postcss-pxtorem": "^6.0.0",
+		"postcss-reporter": "^7.0.5",
+		"postcss-sort-media-queries": "^5.2.0",
+		"postcss-uncss": "^0.17.0",
+		"sass": "^1.69.5",
+		"uncss": "^0.17.3",
+		"webp-in-css": "^0.8.0"
 	}
 }
