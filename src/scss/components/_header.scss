@@ -13,18 +13,16 @@
 @media only screen and (max-width: 768px) {
 	.header {
 		/* Ваши стили для экранов шириной до 768px */
-		background-color: #ffcc00; /* Рандомный цвет для примера */
+		background-color: #0f9e3f; /* Рандомный цвет для примера */
 	}
 }
 .body {
-	color: #000;
+	color: #22a137;
 }
 .components {
 	color: #000;
 }
-.body {
-	color: #000;
-}
+
 /* Медиа-запрос для устройств с минимальной шириной 769px (например, планшеты и выше) */
 @media only screen and (min-width: 769px) {
 	.header {
