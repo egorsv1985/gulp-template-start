@@ -4,9 +4,8 @@
 	"description": "",
 	"main": "gulpfile.js",
 	"scripts": {
-		"dev": "gulp --dev",
-		"build": "gulp build",
-		"docs": "set NODE_ENV=production&&npm run build",
+		"dev": "cross-env NODE_ENV=development gulp",
+		"docs": "cross-env NODE_ENV=production gulp",
 		"zip": "gulp archive"
 	},
 	"author": "Egor Sabancev",
@@ -14,6 +13,7 @@
 	"devDependencies": {
 		"autoprefixer": "^10.4.16",
 		"browser-sync": "^3.0.2",
+		"cross-env": "^7.0.3",
 		"css-mqpacker": "^7.0.0",
 		"cssnano": "^6.0.3",
 		"del": "^6.0.0",
