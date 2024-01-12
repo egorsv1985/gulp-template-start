@@ -8,9 +8,11 @@
 		"docs": "cross-env NODE_ENV=production gulp",
 		"zip": "gulp archive"
 	},
+	"type": "module",
 	"author": "Egor Sabancev",
 	"license": "ISC",
 	"devDependencies": {
+		"@fullhuman/postcss-purgecss": "^5.0.0",
 		"autoprefixer": "^10.4.16",
 		"browser-sync": "^3.0.2",
 		"cross-env": "^7.0.3",
@@ -42,9 +44,12 @@
 		"gulp-webp": "^4.0.1",
 		"gulp-webp-css": "^1.1.0",
 		"gulp-webp-html": "^1.0.2",
+		"gulp-webp-html-nosvg": "^1.1.1",
 		"gulp-zip": "^5.1.0",
 		"postcss": "^8.4.33",
 		"postcss-animation": "^0.0.12",
+		"postcss-discard-comments": "^6.0.1",
+		"postcss-discard-duplicates": "^6.0.1",
 		"postcss-flexbugs-fixes": "^5.0.2",
 		"postcss-nested": "^6.0.1",
 		"postcss-preset-env": "^9.3.0",
@@ -54,6 +59,7 @@
 		"postcss-uncss": "^0.17.0",
 		"sass": "^1.69.5",
 		"uncss": "^0.17.3",
+		"usedcss": "^1.0.7",
 		"webp-in-css": "^0.8.0"
 	}
 }

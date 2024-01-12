@@ -5,7 +5,6 @@
 	gap: 20px;
 	color: #b86868b4;
 	font-size: 30px;
-	transform: rotate(15deg);
 	background: url('@img/services.png') no-repeat center / cover;
 	animation-name: bounce;
 }
@@ -23,6 +22,9 @@
 .components {
 	color: #000;
 }
+.body {
+	color: #000;
+}
 /* Медиа-запрос для устройств с минимальной шириной 769px (например, планшеты и выше) */
 @media only screen and (min-width: 769px) {
 	.header {
@@ -34,7 +36,7 @@
 	/* Общие стили для .nav */
 	font-size: 16px;
 	font-weight: normal;
-	color: #278b76;
+	color: #21529c;
 }
 
 /* Медиа-запрос для устройств с максимальной шириной 768px (например, мобильные устройства) */

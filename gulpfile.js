@@ -1,29 +1,30 @@
-const gulp = require('gulp')
-const fileInclude = require('gulp-file-include')
-const sass = require('gulp-sass')(require('sass'))
-const clean = require('gulp-clean')
-const fs = require('fs')
-const sourceMaps = require('gulp-sourcemaps')
-const plumber = require('gulp-plumber')
-const notify = require('gulp-notify')
-const changed = require('gulp-changed')
-const sassGlob = require('gulp-sass-glob')
-const postcss = require('gulp-postcss')
-const imagemin = require('gulp-imagemin')
-const webp = require('gulp-webp')
-const webpHTML = require('gulp-webp-html')
-const webImagesCSS = require('gulp-web-images-css')
-const concat = require('gulp-concat')
-const browserSync = require('browser-sync').create()
-const filter = require('gulp-filter')
-const gulpIf = require('gulp-if')
-const replace = require('gulp-replace')
-const zip = require('gulp-zip')
+import gulp from 'gulp'
+import fileInclude from 'gulp-file-include'
+import dartSass from 'sass'
+import gulpSass from 'gulp-sass'
+const sass = gulpSass(dartSass)
+import clean from 'gulp-clean'
+import fs from 'fs'
+import sourceMaps from 'gulp-sourcemaps'
+import plumber from 'gulp-plumber'
+import notify from 'gulp-notify'
+import changed from 'gulp-changed'
+import sassGlob from 'gulp-sass-glob'
+import postcss from 'gulp-postcss'
+import imagemin from 'gulp-imagemin'
+import webp from 'gulp-webp'
+import webpHTML from 'gulp-webp-html'
+import concat from 'gulp-concat'
+import browserSync from 'browser-sync'
+import filter from 'gulp-filter'
+import gulpIf from 'gulp-if'
+import replace from 'gulp-replace'
+import zip from 'gulp-zip'
 
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
 
-const packageJson = require('./package.json')
+const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
 const projectName = packageJson.name
 
 const fileIncludeSettings = {
@@ -68,6 +69,7 @@ const serverOptions = {
 	open: true,
 	notify: false,
 }
+
 const customerServerOptions = {
 	server: {
 		baseDir: paths.dest.dev,
@@ -87,7 +89,7 @@ const plumberNotify = title => {
 	}
 }
 
-const cleanTask = function (done) {
+const cleanTask = done => {
 	const destination = paths.dest.dev
 	if (fs.existsSync(destination)) {
 		return gulp.src(destination, { read: false }).pipe(clean({ force: true }))
@@ -95,7 +97,7 @@ const cleanTask = function (done) {
 	done()
 }
 
-gulp.task('html', function () {
+export const html = () => {
 	const destination = paths.dest.dev
 	const filterHTML = filter(['**/*.html', '!**/_*.html'], { restore: true })
 
@@ -110,9 +112,9 @@ gulp.task('html', function () {
 		.pipe(gulp.dest(destination))
 		.pipe(filterHTML.restore)
 		.pipe(browserSync.stream())
-})
+}
 
-gulp.task('sass', function () {
+export const styles = () => {
 	const destination = paths.dest.dev + 'css/'
 	const filterScss = filter(['**/*', '!src/scss/**/_*.scss'], {
 		restore: true,
@@ -127,15 +129,14 @@ gulp.task('sass', function () {
 		.pipe(sass(sassOptions))
 		.pipe(replace('@img', paths.img.css))
 		.pipe(gulpIf(isProduction, postcss()))
-		.pipe(gulpIf(isProduction, webImagesCSS({ mode: 'all' })))
 		.pipe(sourceMaps.write())
 		.pipe(filterScss)
 		.pipe(gulp.dest(destination))
 		.pipe(filterScss.restore)
 		.pipe(browserSync.stream())
-})
+}
 
-gulp.task('images', function () {
+export const images = () => {
 	const destination = paths.dest.dev + 'images/'
 	return gulp
 		.src(paths.src.images)
@@ -148,30 +149,30 @@ gulp.task('images', function () {
 		.pipe(gulpIf(isProduction, imagemin({ verbose: true })))
 		.pipe(gulp.dest(destination))
 		.pipe(browserSync.stream())
-})
+}
 
 // Fonts Task
-gulp.task('fonts', function () {
+export const fonts = () => {
 	const destination = paths.dest.dev + 'fonts/'
 	return gulp
 		.src(paths.src.fonts)
 		.pipe(changed(destination))
 		.pipe(gulp.dest(destination))
 		.pipe(browserSync.stream())
-})
+}
 
 // Files Task
-gulp.task('files', function () {
+export const files = () => {
 	const destination = paths.dest.dev + 'files/'
 	return gulp
 		.src(paths.src.files)
 		.pipe(changed(destination))
 		.pipe(gulp.dest(destination))
 		.pipe(browserSync.stream())
-})
+}
 
 // JavaScript Task
-gulp.task('js', function () {
+export const js = () => {
 	const destination = paths.dest.dev + 'js/'
 	return gulp
 		.src(paths.src.js)
@@ -181,9 +182,9 @@ gulp.task('js', function () {
 		.pipe(concat('app.js'))
 		.pipe(gulp.dest(destination))
 		.pipe(browserSync.stream())
-})
+}
 
-gulp.task('archive', function () {
+export const archive = () => {
 	const source = paths.dest.dev + '**/*'
 	const destination = './'
 
@@ -191,43 +192,37 @@ gulp.task('archive', function () {
 		.src(source)
 		.pipe(zip(`${projectName}.zip`))
 		.pipe(gulp.dest(destination))
-})
+}
 
-gulp.task('server', function () {
+export const server = () => {
 	browserSync.init(serverOptions)
-})
+}
 
-gulp.task('server-customer', function () {
+export const serverCustomer = () => {
 	browserSync.init(customerServerOptions)
-})
+}
 
-gulp.task('watch', function () {
-	gulp.watch(paths.src.scss, gulp.series('sass'))
+export const watch = () => {
+	gulp.watch(paths.src.scss, gulp.series('styles'))
 	gulp.watch(paths.src.html, gulp.series('html'))
 	gulp.watch(paths.src.images, gulp.series('images'))
 	gulp.watch(paths.src.fonts, gulp.series('fonts'))
 	gulp.watch(paths.src.files, gulp.series('files'))
 	gulp.watch(paths.src.js, gulp.series('js'))
-})
+}
 
-gulp.task(
-	'dev',
-	gulp.series(
-		cleanTask,
-		gulp.parallel('html', 'sass', 'images', 'fonts', 'files', 'js'),
-		gulp.parallel('server', 'watch')
-	)
+export const dev = gulp.series(
+	cleanTask,
+	gulp.parallel(html, styles, images, fonts, files, js),
+	gulp.parallel(server, watch)
 )
 
-gulp.task(
-	'docs',
-	gulp.series(
-		cleanTask,
-		gulp.parallel('html', 'sass', 'images', 'fonts', 'files', 'js'),
-		'server-customer'
-	)
+export const docs = gulp.series(
+	cleanTask,
+	gulp.parallel(html, styles, images, fonts, files, js),
+	serverCustomer
 )
 
-gulp.task('zip', gulp.series('docs', 'archive'))
+export const zipTask = gulp.series(docs, archive)
 
-gulp.task('default', gulp.series('dev'))
+export default dev

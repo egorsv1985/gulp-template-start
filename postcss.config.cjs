@@ -6,10 +6,9 @@ module.exports = {
 		require('postcss-nested'), // Вложенные правила, как в препроцессорах
 		// require('cssnano'), // Минификация и оптимизация CSS
 		require('postcss-flexbugs-fixes'), // Исправления для багов в Flexbox
-		// require('postcss-uncss')({
-		// 	html: ['**/*.html'],
-		// 	ignore: ['**/*.js', '/node_modules/', '/src/'],
-		// }),
+		require('postcss-discard-comments')({
+			removeAll: true,
+		}),
 		// require('css-mqpacker'),
 		require('postcss-reporter'),
 		require('postcss-pxtorem')({
@@ -22,9 +21,14 @@ module.exports = {
 			minPixelValue: 0,
 			exclude: /node_modules/i,
 		}),
+		require('postcss-discard-duplicates')(),
+		require('@fullhuman/postcss-purgecss')({
+			content: ['./**/*.html'],
+		}),
 		require('postcss-sort-media-queries')(),
 		require('postcss-animation'),
 		require('webp-in-css/plugin'),
+		require('usedcss')({ html: ['**/*.html'] }),
 		// Добавьте другие плагины, если они вам необходимы
 	],
 }
