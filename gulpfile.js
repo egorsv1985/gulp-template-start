@@ -20,6 +20,10 @@ import filter from 'gulp-filter'
 import gulpIf from 'gulp-if'
 import replace from 'gulp-replace'
 import zip from 'gulp-zip'
+import cleanCSS from 'gulp-clean-css'
+import rename from 'gulp-rename'
+import terser from 'gulp-terser'
+import newer from 'gulp-newer'
 
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
@@ -55,11 +59,12 @@ const sassOptions = {
 	includePaths: ['./node_modules'],
 }
 
-const autoprefixerOptions = {
-	grid: true,
-	overrideBrowserslist: ['last 8 versions'],
-	cascade: true,
-}
+const destination = paths.dest.dev
+const cssDestination = destination + 'css/'
+const imagesDestination = destination + 'images/'
+const fontsDestination = destination + 'fonts/'
+const filesDestination = destination + 'files/'
+const jsDestination = destination + 'js/'
 
 const serverOptions = {
 	server: {
@@ -90,7 +95,6 @@ const plumberNotify = title => {
 }
 
 const cleanTask = done => {
-	const destination = paths.dest.dev
 	if (fs.existsSync(destination)) {
 		return gulp.src(destination, { read: false }).pipe(clean({ force: true }))
 	}
@@ -98,7 +102,6 @@ const cleanTask = done => {
 }
 
 export const html = () => {
-	const destination = paths.dest.dev
 	const filterHTML = filter(['**/*.html', '!**/_*.html'], { restore: true })
 
 	return gulp
@@ -115,14 +118,13 @@ export const html = () => {
 }
 
 export const styles = () => {
-	const destination = paths.dest.dev + 'css/'
 	const filterScss = filter(['**/*', '!src/scss/**/_*.scss'], {
 		restore: true,
 	})
 
 	return gulp
 		.src(paths.src.scss)
-		.pipe(changed(destination))
+		.pipe(changed(cssDestination))
 		.pipe(plumber(plumberNotify('SCSS')))
 		.pipe(sourceMaps.init())
 		.pipe(sassGlob())
@@ -131,57 +133,66 @@ export const styles = () => {
 		.pipe(gulpIf(isProduction, postcss()))
 		.pipe(sourceMaps.write())
 		.pipe(filterScss)
-		.pipe(gulp.dest(destination))
+		.pipe(gulp.dest(cssDestination))
 		.pipe(filterScss.restore)
 		.pipe(browserSync.stream())
 }
 
+export const stylesMin = () => {
+	return gulp
+		.src(cssDestination + '*.css')
+		.pipe(cleanCSS())
+		.pipe(rename({ suffix: '.min' }))
+		.pipe(gulp.dest(cssDestination))
+}
+
 export const images = () => {
-	const destination = paths.dest.dev + 'images/'
 	return gulp
 		.src(paths.src.images)
-		.pipe(changed(destination))
+		.pipe(newer(imagesDestination))
 		.pipe(gulpIf(isProduction, webp()))
-		.pipe(gulp.dest(destination))
-		.pipe(gulp.src(paths.src.images))
-		.pipe(changed(destination))
-		.pipe(gulp.dest(destination))
+		.pipe(gulp.dest(imagesDestination))
 		.pipe(gulpIf(isProduction, imagemin({ verbose: true })))
-		.pipe(gulp.dest(destination))
+		.pipe(gulp.dest(imagesDestination))
 		.pipe(browserSync.stream())
 }
 
 // Fonts Task
 export const fonts = () => {
-	const destination = paths.dest.dev + 'fonts/'
 	return gulp
 		.src(paths.src.fonts)
-		.pipe(changed(destination))
-		.pipe(gulp.dest(destination))
+		.pipe(changed(fontsDestination))
+		.pipe(gulp.dest(fontsDestination))
 		.pipe(browserSync.stream())
 }
 
 // Files Task
 export const files = () => {
-	const destination = paths.dest.dev + 'files/'
 	return gulp
 		.src(paths.src.files)
-		.pipe(changed(destination))
-		.pipe(gulp.dest(destination))
+		.pipe(changed(filesDestination))
+		.pipe(gulp.dest(filesDestination))
 		.pipe(browserSync.stream())
 }
 
 // JavaScript Task
 export const js = () => {
-	const destination = paths.dest.dev + 'js/'
 	return gulp
 		.src(paths.src.js)
-		.pipe(changed(destination))
+		.pipe(changed(jsDestination))
 		.pipe(plumber(plumberNotify('JS')))
 		.pipe(replace('@img', paths.img.js))
 		.pipe(concat('app.js'))
-		.pipe(gulp.dest(destination))
+		.pipe(gulp.dest(jsDestination))
 		.pipe(browserSync.stream())
+}
+
+export const jsMin = () => {
+	return gulp
+		.src(jsDestination + '*.js')
+		.pipe(terser())
+		.pipe(rename({ suffix: '.min' }))
+		.pipe(gulp.dest(jsDestination))
 }
 
 export const archive = () => {
@@ -189,7 +200,7 @@ export const archive = () => {
 	const destination = './'
 
 	return gulp
-		.src(source)
+		.src(source, { base: paths.dest.dev })
 		.pipe(zip(`${projectName}.zip`))
 		.pipe(gulp.dest(destination))
 }
@@ -224,5 +235,6 @@ export const docs = gulp.series(
 )
 
 export const zipTask = gulp.series(docs, archive)
+export const min = gulp.series(stylesMin, jsMin)
 
 export default dev
