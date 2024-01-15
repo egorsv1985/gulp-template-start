@@ -4,7 +4,7 @@ module.exports = {
 		require('postcss-preset-env'), // Использование новых возможностей CSS
 		require('postcss-custom-media'), // Поддержка пользовательских медиазапросов
 		require('postcss-nested'), // Вложенные правила, как в препроцессорах
-		// require('cssnano'), // Минификация и оптимизация CSS
+
 		require('postcss-flexbugs-fixes'), // Исправления для багов в Flexbox
 		require('postcss-discard-comments')({
 			removeAll: true,

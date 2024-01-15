@@ -1,3 +1,4 @@
+// Импорты модулей Gulp
 import gulp from 'gulp'
 import fileInclude from 'gulp-file-include'
 import dartSass from 'sass'
@@ -13,7 +14,6 @@ import sassGlob from 'gulp-sass-glob'
 import postcss from 'gulp-postcss'
 import imagemin from 'gulp-imagemin'
 import webp from 'gulp-webp'
-import webpHTML from 'gulp-webp-html'
 import concat from 'gulp-concat'
 import browserSync from 'browser-sync'
 import filter from 'gulp-filter'
@@ -24,17 +24,20 @@ import cleanCSS from 'gulp-clean-css'
 import rename from 'gulp-rename'
 import terser from 'gulp-terser'
 
-// Constants
+// Константа, определяющая режим сборки (разработка или продакшн)
 const isProduction = process.env.NODE_ENV === 'production'
 
+// Чтение информации о проекте из package.json
 const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
 const projectName = packageJson.name
 
+// Настройки для gulp-file-include
 const fileIncludeSettings = {
 	prefix: '@@',
 	basepath: '@file',
 }
 
+// Пути к исходным файлам и папкам назначения
 const paths = {
 	src: {
 		html: './src/html/**/*.html',
@@ -54,10 +57,12 @@ const paths = {
 	},
 }
 
+// Опции для компиляции Sass
 const sassOptions = {
 	includePaths: ['./node_modules'],
 }
 
+// Определение путей для различных задач
 const destination = paths.dest.dev
 const cssDestination = destination + 'css/'
 const imagesDestination = destination + 'images/'
@@ -65,6 +70,7 @@ const fontsDestination = destination + 'fonts/'
 const filesDestination = destination + 'files/'
 const jsDestination = destination + 'js/'
 
+// Настройки сервера для разработки
 const serverOptions = {
 	server: {
 		baseDir: paths.dest.dev,
@@ -74,6 +80,7 @@ const serverOptions = {
 	notify: false,
 }
 
+// Настройки сервера для продакшна
 const customerServerOptions = {
 	server: {
 		baseDir: paths.dest.dev,
@@ -83,6 +90,7 @@ const customerServerOptions = {
 	notify: false,
 }
 
+// Функция для обработки ошибок с уведомлением
 const plumberNotify = title => {
 	return {
 		errorHandler: notify.onError({
@@ -93,6 +101,7 @@ const plumberNotify = title => {
 	}
 }
 
+// Задача для очистки папки dist перед сборкой
 const cleanTask = done => {
 	if (fs.existsSync(destination)) {
 		return gulp.src(destination, { read: false }).pipe(clean({ force: true }))
@@ -100,6 +109,7 @@ const cleanTask = done => {
 	done()
 }
 
+// Задача для сборки HTML
 export const html = () => {
 	const filterHTML = filter(['**/*.html', '!**/_*.html'], { restore: true })
 
@@ -116,6 +126,7 @@ export const html = () => {
 		.pipe(browserSync.stream())
 }
 
+// Задача для сборки стилей
 export const styles = () => {
 	const filterScss = filter(['**/*', '!src/scss/**/_*.scss'], {
 		restore: true,
@@ -137,6 +148,7 @@ export const styles = () => {
 		.pipe(browserSync.stream())
 }
 
+// Задача для минификации стилей
 export const stylesMin = () => {
 	return gulp
 		.src(cssDestination + '*.css')
@@ -145,6 +157,7 @@ export const stylesMin = () => {
 		.pipe(gulp.dest(cssDestination))
 }
 
+// Задача для сборки изображений
 export const images = () => {
 	return gulp
 		.src(paths.src.images)
@@ -159,7 +172,7 @@ export const images = () => {
 		.pipe(browserSync.stream())
 }
 
-// Fonts Task
+// Задача для копирования шрифтов
 export const fonts = () => {
 	return gulp
 		.src(paths.src.fonts)
@@ -168,7 +181,7 @@ export const fonts = () => {
 		.pipe(browserSync.stream())
 }
 
-// Files Task
+// Задача для копирования файлов
 export const files = () => {
 	return gulp
 		.src(paths.src.files)
@@ -177,7 +190,7 @@ export const files = () => {
 		.pipe(browserSync.stream())
 }
 
-// JavaScript Task
+// Задача для сборки JavaScript
 export const js = () => {
 	return gulp
 		.src(paths.src.js)
@@ -189,6 +202,7 @@ export const js = () => {
 		.pipe(browserSync.stream())
 }
 
+// Задача для минификации JavaScript
 export const jsMin = () => {
 	return gulp
 		.src(jsDestination + '*.js')
@@ -197,6 +211,7 @@ export const jsMin = () => {
 		.pipe(gulp.dest(jsDestination))
 }
 
+// Задача для архивации собранного проекта
 export const archive = () => {
 	const source = paths.dest.dev + '**/*'
 	const destination = './'
@@ -207,14 +222,17 @@ export const archive = () => {
 		.pipe(gulp.dest(destination))
 }
 
+// Задача для запуска сервера разработки
 export const server = () => {
 	browserSync.init(serverOptions)
 }
 
+// Задача для запуска сервера продакшна
 export const serverCustomer = () => {
 	browserSync.init(customerServerOptions)
 }
 
+// Задача для отслеживания изменений в файлах и автоматической пересборки
 export const watch = () => {
 	gulp.watch(paths.src.scss, gulp.series('styles'))
 	gulp.watch(paths.src.html, gulp.series('html'))
@@ -224,23 +242,28 @@ export const watch = () => {
 	gulp.watch(paths.src.js, gulp.series('js'))
 }
 
+// Задача для разработки
 export const dev = gulp.series(
 	cleanTask,
 	gulp.parallel(html, styles, images, fonts, files, js),
 	gulp.parallel(server, watch)
 )
 
+// Задача для продакшн
 export const docs = gulp.series(
 	cleanTask,
 	gulp.parallel(html, styles, images, fonts, files, js),
 	serverCustomer
 )
 
+// Задача для архивации проекта без минификации
 export const zipTask = gulp.series(
 	cleanTask,
 	gulp.parallel(html, styles, images, fonts, files, js),
 	archive
 )
+
+// Задача для архивации проекта с минификацией
 export const zipTaskMin = gulp.series(
 	cleanTask,
 	gulp.parallel(html, styles, images, fonts, files, js),
@@ -248,6 +271,9 @@ export const zipTaskMin = gulp.series(
 	jsMin,
 	archive
 )
+
+// Задача для минификации стилей и JavaScript
 export const min = gulp.series(stylesMin, jsMin)
 
+// Экспорт задачи по умолчанию
 export default dev
