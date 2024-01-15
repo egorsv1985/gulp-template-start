@@ -23,7 +23,6 @@ import zip from 'gulp-zip'
 import cleanCSS from 'gulp-clean-css'
 import rename from 'gulp-rename'
 import terser from 'gulp-terser'
-import newer from 'gulp-newer'
 
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
@@ -149,8 +148,11 @@ export const stylesMin = () => {
 export const images = () => {
 	return gulp
 		.src(paths.src.images)
-		.pipe(newer(imagesDestination))
+		.pipe(changed(imagesDestination))
 		.pipe(gulpIf(isProduction, webp()))
+		.pipe(gulp.dest(imagesDestination))
+		.pipe(gulp.src(paths.src.images))
+		.pipe(changed(imagesDestination))
 		.pipe(gulp.dest(imagesDestination))
 		.pipe(gulpIf(isProduction, imagemin({ verbose: true })))
 		.pipe(gulp.dest(imagesDestination))
@@ -234,7 +236,18 @@ export const docs = gulp.series(
 	serverCustomer
 )
 
-export const zipTask = gulp.series(docs, archive)
+export const zipTask = gulp.series(
+	cleanTask,
+	gulp.parallel(html, styles, images, fonts, files, js),
+	archive
+)
+export const zipTaskMin = gulp.series(
+	cleanTask,
+	gulp.parallel(html, styles, images, fonts, files, js),
+	stylesMin,
+	jsMin,
+	archive
+)
 export const min = gulp.series(stylesMin, jsMin)
 
 export default dev

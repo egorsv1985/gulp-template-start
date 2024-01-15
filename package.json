@@ -6,7 +6,8 @@
 	"scripts": {
 		"dev": "cross-env NODE_ENV=development gulp",
 		"docs": "cross-env NODE_ENV=production gulp",
-		"zip": "gulp archive",
+		"zip": "cross-env NODE_ENV=production gulp zipTask",
+		"zip-min": "cross-env NODE_ENV=production gulp zipTaskMin",
 		"min": "gulp min"
 	},
 	"type": "module",
