@@ -195,7 +195,7 @@ export const files = () => {
 }
 
 // Задача для сборки JavaScript
-export const js = () => {
+export const scripts = () => {
 	return gulp
 		.src(paths.src.js)
 		.pipe(changed(jsDestination))
@@ -207,7 +207,7 @@ export const js = () => {
 }
 
 // Задача для минификации JavaScript
-export const jsMin = () => {
+export const scriptsMin = () => {
 	return gulp
 		.src(jsDestination + '*.js')
 		.pipe(terser())
@@ -243,36 +243,36 @@ export const watch = () => {
 	gulp.watch(paths.src.images, gulp.series('images'))
 	gulp.watch(paths.src.fonts, gulp.series('fonts'))
 	gulp.watch(paths.src.files, gulp.series('files'))
-	gulp.watch(paths.src.js, gulp.series('js'))
+	gulp.watch(paths.src.js, gulp.series('scripts'))
 }
 
 // Задача для разработки
 export const dev = gulp.series(
 	cleanTask,
-	gulp.parallel(html, styles, images, fonts, files, js),
+	gulp.parallel(html, styles, images, fonts, files, scripts),
 	gulp.parallel(server, watch)
 )
 
 // Задача для продакшн
 export const docs = gulp.series(
 	cleanTask,
-	gulp.parallel(html, styles, images, fonts, files, js),
+	gulp.parallel(html, styles, images, fonts, files, scripts),
 	serverCustomer
 )
 
 // Задача для архивации проекта без минификации
 export const zipTask = gulp.series(
 	cleanTask,
-	gulp.parallel(html, styles, images, fonts, files, js),
+	gulp.parallel(html, styles, images, fonts, files, scripts),
 	archive
 )
 
 // Задача для архивации проекта с минификацией
 export const zipTaskMin = gulp.series(
 	cleanTask,
-	gulp.parallel(html, styles, images, fonts, files, js),
+	gulp.parallel(html, styles, images, fonts, files, scripts),
 	stylesMin,
-	jsMin,
+	scriptsMin,
 	archive
 )
 
@@ -281,3 +281,9 @@ export const min = gulp.series(stylesMin, jsMin)
 
 // Экспорт задачи по умолчанию
 export default dev
+
+// // gulpfile.js
+// import { gulp } from './config/plugins';
+// import { dev } from './tasks/dev';
+
+// gulp.task('default', dev);
