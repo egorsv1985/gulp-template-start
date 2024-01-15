@@ -9,7 +9,7 @@ module.exports = {
 		require('postcss-discard-comments')({
 			removeAll: true,
 		}),
-		// require('css-mqpacker'),
+
 		require('postcss-reporter'),
 		require('postcss-pxtorem')({
 			rootValue: 16,
