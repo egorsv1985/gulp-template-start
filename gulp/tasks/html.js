@@ -1,11 +1,11 @@
 import {
-	gulp,
-	paths,
 	destination,
-	isProduction,
+	plumberNotify,
 	fileIncludeSettings,
-} from '../config/options'
-import plugins from '../config/plugins'
+	isProduction,
+} from '../config/options.js'
+import { paths } from '../config/paths.js'
+import { plugins } from '../config/plugins.js'
 
 // Задача для сборки HTML
 export const html = () => {
@@ -13,15 +13,15 @@ export const html = () => {
 		restore: true,
 	})
 
-	return gulp
+	return plugins.gulp
 		.src(paths.src.html)
 		.pipe(plugins.changed(destination))
-		.pipe(plugins.plumber(plugins.plumberNotify('HTML')))
+		.pipe(plugins.plumber(plumberNotify('HTML')))
 		.pipe(plugins.fileInclude(fileIncludeSettings))
 		.pipe(plugins.gulpIf(isProduction, plugins.webpHTML()))
 		.pipe(plugins.replace('@img', paths.img.html))
 		.pipe(filterHTML)
-		.pipe(gulp.dest(destination))
+		.pipe(plugins.gulp.dest(destination))
 		.pipe(filterHTML.restore)
 		.pipe(plugins.browserSync.stream())
 }

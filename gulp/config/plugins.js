@@ -1,11 +1,11 @@
 // Импорты модулей Gulp
 import gulp from 'gulp' // Gulp - основной модуль для задач сборки
 import fileInclude from 'gulp-file-include' // Плагин для вставки файлов в HTML
+import fs from 'fs' // Модуль для работы с файловой системой
 import dartSass from 'sass' // Dart Sass - реализация препроцессора Sass
 import gulpSass from 'gulp-sass' // Gulp Sass - плагин для компиляции Sass
 const sass = gulpSass(dartSass) // Использование Gulp Sass с Dart Sass
 import clean from 'gulp-clean' // Плагин для очистки директории сборки
-import fs from 'fs' // Модуль для работы с файловой системой
 import sourceMaps from 'gulp-sourcemaps' // Плагин для генерации sourcemaps
 import plumber from 'gulp-plumber' // Плагин для обработки ошибок без остановки Gulp
 import notify from 'gulp-notify' // Плагин для уведомлений об ошибках
@@ -26,7 +26,7 @@ import rename from 'gulp-rename' // Плагин для переименован
 import terser from 'gulp-terser' // Плагин для минификации JavaScript
 import newer from 'gulp-newer' // Плагин для фильтрации новых файлов
 
-export {
+export const plugins = {
 	gulp,
 	fileInclude,
 	dartSass,

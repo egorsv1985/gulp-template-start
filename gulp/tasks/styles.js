@@ -1,19 +1,19 @@
 import {
-	gulp,
-	paths,
 	cssDestination,
-	isProduction,
+	plumberNotify,
 	sassOptions,
-} from '../config/options'
-import plugins from '../config/plugins'
+	isProduction,
+} from '../config/options.js'
+import { paths } from '../config/paths.js'
+import { plugins } from '../config/plugins.js'
 
 // Задача для сборки стилей
 export const styles = () => {
-	const filterScss = filter(['**/*', '!src/scss/**/_*.scss'], {
+	const filterScss = plugins.filter(['**/*', '!src/scss/**/_*.scss'], {
 		restore: true,
 	})
 
-	return gulp
+	return plugins.gulp
 		.src(paths.src.scss)
 		.pipe(plugins.changed(cssDestination))
 		.pipe(plugins.plumber(plumberNotify('SCSS')))
@@ -24,7 +24,7 @@ export const styles = () => {
 		.pipe(plugins.gulpIf(isProduction, plugins.postcss()))
 		.pipe(plugins.sourceMaps.write())
 		.pipe(filterScss)
-		.pipe(gulp.dest(cssDestination))
+		.pipe(plugins.gulp.dest(cssDestination))
 		.pipe(filterScss.restore)
 		.pipe(plugins.browserSync.stream())
 }

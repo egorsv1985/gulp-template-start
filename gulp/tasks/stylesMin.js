@@ -1,11 +1,12 @@
-import { gulp, cssDestination } from '../config/options'
-import plugins from '../config/plugins'
+import { cssDestination } from '../config/options.js'
+
+import { plugins } from '../config/plugins.js'
 
 // Задача для минификации стилей
 export const stylesMin = () => {
-	return gulp
+	return plugins.gulp
 		.src(cssDestination + '*.css')
 		.pipe(plugins.cleanCSS())
 		.pipe(plugins.rename({ suffix: '.min' }))
-		.pipe(gulp.dest(cssDestination))
+		.pipe(plugins.gulp.dest(cssDestination))
 }

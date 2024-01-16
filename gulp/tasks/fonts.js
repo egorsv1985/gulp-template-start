@@ -1,11 +1,12 @@
-import { gulp, paths, fontsDestination } from '../config/options'
-import plugins from '../config/plugins'
+import { fontsDestination } from '../config/options.js'
+import { paths } from '../config/paths.js'
+import { plugins } from '../config/plugins.js'
 
 // Задача для копирования шрифтов
 export const fonts = () => {
-	return gulp
+	return plugins.gulp
 		.src(paths.src.fonts)
 		.pipe(plugins.changed(fontsDestination))
-		.pipe(gulp.dest(fontsDestination))
+		.pipe(plugins.gulp.dest(fontsDestination))
 		.pipe(plugins.browserSync.stream())
 }

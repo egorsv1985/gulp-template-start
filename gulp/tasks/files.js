@@ -1,11 +1,12 @@
-import { gulp, paths, filesDestination } from '../config/options'
-import plugins from '../config/plugins'
+import { filesDestination } from '../config/options.js'
+import { paths } from '../config/paths.js'
+import { plugins } from '../config/plugins.js'
 
 // Задача для копирования файлов
 export const files = () => {
-	return gulp
+	return plugins.gulp
 		.src(paths.src.files)
 		.pipe(plugins.changed(filesDestination))
-		.pipe(gulp.dest(filesDestination))
+		.pipe(plugins.gulp.dest(filesDestination))
 		.pipe(plugins.browserSync.stream())
 }

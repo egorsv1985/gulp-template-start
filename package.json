@@ -36,7 +36,7 @@
 		"gulp-notify": "latest",
 		"gulp-plumber": "latest",
 		"gulp-postcss": "latest",
-		"gulp-rename": "^2.0.0",
+		"gulp-rename": "latest",
 		"gulp-replace": "latest",
 		"gulp-sass": "latest",
 		"gulp-sass-glob": "latest",

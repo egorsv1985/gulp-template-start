@@ -1,9 +1,11 @@
+import { plugins } from './plugins.js'
+import { paths } from './paths.js'
 // Константа, определяющая режим сборки (разработка или продакшн)
 export const isProduction = process.env.NODE_ENV === 'production'
 
 // Чтение информации о проекте из package.json
 export const packageJson = JSON.parse(
-	fs.readFileSync('./package.json', 'utf-8')
+	plugins.fs.readFileSync('./package.json', 'utf-8')
 )
 export const projectName = packageJson.name
 
@@ -50,7 +52,7 @@ export const customerServerOptions = {
 // Функция для обработки ошибок с уведомлением
 export const plumberNotify = title => {
 	return {
-		errorHandler: notify.onError({
+		errorHandler: plugins.notify.onError({
 			title: title,
 			message: 'Error <%= error.message %>',
 			sound: false,

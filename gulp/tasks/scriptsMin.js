@@ -1,10 +1,11 @@
-import { gulp, jsDestination } from '../config/options'
-import plugins from '../config/plugins'
+import { jsDestination } from '../config/options.js'
+
+import { plugins } from '../config/plugins.js'
 // Задача для минификации JavaScript
 export const scriptsMin = () => {
-	return gulp
+	return plugins.gulp
 		.src(jsDestination + '*.js')
 		.pipe(plugins.terser())
 		.pipe(plugins.rename({ suffix: '.min' }))
-		.pipe(gulp.dest(jsDestination))
+		.pipe(plugins.gulp.dest(jsDestination))
 }

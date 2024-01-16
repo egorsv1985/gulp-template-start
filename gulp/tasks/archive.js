@@ -1,10 +1,11 @@
-import { gulp, paths, source, archiveDestination } from '../config/options'
-import plugins from '../config/plugins'
+import { source, archiveDestination, projectName } from '../config/options.js'
+import { paths } from '../config/paths.js'
+import { plugins } from '../config/plugins.js'
 
 // Задача для архивации собранного проекта
 export const archive = () => {
-	return gulp
+	return plugins.gulp
 		.src(source, { base: paths.dest.dev })
 		.pipe(plugins.zip(`${projectName}.zip`))
-		.pipe(gulp.dest(archiveDestination))
+		.pipe(plugins.gulp.dest(archiveDestination))
 }
