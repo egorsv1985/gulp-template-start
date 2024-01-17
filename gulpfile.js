@@ -11,7 +11,6 @@ import { images } from './gulp/tasks/images.js'
 import { scripts } from './gulp/tasks/scripts.js'
 import { scriptsMin } from './gulp/tasks/scriptsMin.js'
 import { server } from './gulp/tasks/server.js'
-import { serverCustomer } from './gulp/tasks/serverCustomer.js'
 import { styles } from './gulp/tasks/styles.js'
 import { stylesMin } from './gulp/tasks/stylesMin.js'
 
@@ -25,7 +24,7 @@ export { images }
 export { scripts }
 export { scriptsMin }
 export { server }
-export { serverCustomer }
+
 export { styles }
 export { stylesMin }
 
@@ -50,7 +49,7 @@ export const dev = plugins.gulp.series(
 export const docs = plugins.gulp.series(
 	cleanTask,
 	plugins.gulp.parallel(html, styles, images, fonts, files, scripts),
-	serverCustomer
+	server
 )
 
 // Задача для архивации проекта без минификации
