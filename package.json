@@ -61,6 +61,7 @@
 		"postcss-sort-media-queries": "latest",
 		"postcss-uncss": "latest",
 		"sass": "latest",
+		"tailwindcss": "latest",
 		"uncss": "latest",
 		"usedcss": "latest",
 		"webp-in-css": "latest"

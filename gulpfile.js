@@ -4,12 +4,10 @@ import { paths } from './gulp/config/paths.js'
 // Импорт задач
 import { archive } from './gulp/tasks/archive.js'
 import { cleanTask } from './gulp/tasks/cleanTask.js'
-
 import { files } from './gulp/tasks/files.js'
 import { fonts } from './gulp/tasks/fonts.js'
 import { html } from './gulp/tasks/html.js'
 import { images } from './gulp/tasks/images.js'
-
 import { scripts } from './gulp/tasks/scripts.js'
 import { scriptsMin } from './gulp/tasks/scriptsMin.js'
 import { server } from './gulp/tasks/server.js'
@@ -20,12 +18,10 @@ import { stylesMin } from './gulp/tasks/stylesMin.js'
 // Экспорт задач
 export { archive }
 export { cleanTask }
-
 export { files }
 export { fonts }
 export { html }
 export { images }
-
 export { scripts }
 export { scriptsMin }
 export { server }
