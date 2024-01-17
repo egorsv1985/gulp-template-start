@@ -1,22 +1,14 @@
 import { plugins } from './plugins.js'
 import { paths } from './paths.js'
-// Используйте import * as
-import * as postcssConfig from '../../postcss.config.cjs'
-const { devPlugins, docsPlugins, tailwindPlugins } = postcssConfig
 // Константа, определяющая режим сборки (разработка или продакшн)
 export const isProduction = process.env.NODE_ENV === 'production'
-export const useTailwind = true
+
 // Чтение информации о проекте из package.json
 export const packageJson = JSON.parse(
 	plugins.fs.readFileSync('./package.json', 'utf-8')
 )
 export const projectName = packageJson.name
 
-export const postcssPlugins = {
-	dev: devPlugins,
-	docs: docsPlugins,
-	tailwind: useTailwind,
-}
 // Настройки для gulp-file-include
 export const fileIncludeSettings = {
 	prefix: '@@',
@@ -29,7 +21,6 @@ export const sassOptions = {
 export const filterScss = plugins.filter(['**/*', '!src/scss/**/_*.scss'], {
 	restore: true,
 })
-
 // Определение путей для различных задач
 export const destination = paths.dest.dev
 export const cssDestination = destination + 'css/'

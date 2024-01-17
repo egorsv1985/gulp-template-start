@@ -5,7 +5,7 @@
 	"main": "gulpfile.js",
 	"scripts": {
 		"dev": "cross-env NODE_ENV=development gulp",
-		"docs": "cross-env NODE_ENV=production gulp",
+		"docs": "cross-env NODE_ENV=production gulp docs",
 		"zip": "cross-env NODE_ENV=production gulp zipTask",
 		"zip-min": "cross-env NODE_ENV=production gulp zipTaskMin",
 		"min": "gulp min"

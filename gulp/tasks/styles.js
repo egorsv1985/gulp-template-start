@@ -4,8 +4,6 @@ import {
 	sassOptions,
 	isProduction,
 	filterScss,
-	postcssPlugins,
-	useTailwind,
 } from '../config/options.js'
 import { paths } from '../config/paths.js'
 import { plugins } from '../config/plugins.js'
@@ -21,8 +19,6 @@ export const styles = () => {
 		.pipe(plugins.sass(sassOptions))
 		.pipe(plugins.replace('@img', paths.img.css))
 		.pipe(plugins.gulpIf(isProduction, plugins.postcss()))
-		.pipe(plugins.gulpIf(!isProduction, plugins.postcss(postcssPlugins.dev)))
-		.pipe(plugins.gulpIf(useTailwind, plugins.postcss(postcssPlugins.tailwind)))
 		.pipe(plugins.sourceMaps.write())
 		.pipe(filterScss)
 		.pipe(plugins.gulp.dest(cssDestination))
