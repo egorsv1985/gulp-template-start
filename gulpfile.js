@@ -1,6 +1,7 @@
 // Импорт основного модуля
 import { plugins } from './gulp/config/plugins.js'
 import { paths } from './gulp/config/paths.js'
+
 // Импорт задач
 import { archive } from './gulp/tasks/archive.js'
 import { cleanTask } from './gulp/tasks/cleanTask.js'

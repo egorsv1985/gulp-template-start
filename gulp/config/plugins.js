@@ -25,6 +25,7 @@ import cleanCSS from 'gulp-clean-css' // Плагин для минификац�
 import rename from 'gulp-rename' // Плагин для переименования файлов
 import terser from 'gulp-terser' // Плагин для минификации JavaScript
 import newer from 'gulp-newer' // Плагин для фильтрации новых файлов
+import pug from 'gulp-pug'
 
 export const plugins = {
 	gulp,
@@ -52,4 +53,5 @@ export const plugins = {
 	rename,
 	terser,
 	newer,
+	pug,
 }

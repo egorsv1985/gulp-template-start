@@ -2,6 +2,7 @@
 export const paths = {
 	src: {
 		html: './src/html/**/*.html',
+		pug: './src/pug/**/*.pug',
 		scss: './src/scss/**/*.scss',
 		images: './src/images/**/*',
 		fonts: './src/fonts/**/*',
