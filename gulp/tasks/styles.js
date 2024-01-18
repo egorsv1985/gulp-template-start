@@ -64,7 +64,12 @@ export const styles = () => {
 		.pipe(sass(sassOptions))
 		.pipe(replace('@img', paths.img.css))
 		.pipe(gulpIf(isProduction, postcss(postcssPlugins)))
-		.pipe(useTailwind && postcss(postcssPlugins.tailwindPlugins))
+		.pipe(
+			useTailwind
+				? postcss(postcssPlugins.tailwindPlugins)
+				: plugins.gulp.dest(cssDestination)
+		)
+
 		.pipe(sourceMaps.write())
 		.pipe(filterScss)
 		.pipe(gulp.dest(cssDestination))
