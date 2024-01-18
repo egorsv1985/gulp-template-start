@@ -1,10 +1,9 @@
 module.exports = {
-	plugins: [
+	prodPostcssPlugins: [
 		require('autoprefixer'), // Добавление вендорных префиксов
 		require('postcss-preset-env'), // Использование новых возможностей CSS
 		require('postcss-custom-media'), // Поддержка пользовательских медиазапросов
 		require('postcss-nested'), // Вложенные правила, как в препроцессорах
-		require('tailwindcss'),
 		require('postcss-flexbugs-fixes'), // Исправления для багов в Flexbox
 		require('postcss-discard-comments')({
 			removeAll: true,
@@ -31,4 +30,5 @@ module.exports = {
 		require('usedcss')({ html: ['**/*.html'] }),
 		// Добавьте другие плагины, если они вам необходимы
 	],
+	tailwindPlugins: [require('tailwindcss')],
 }

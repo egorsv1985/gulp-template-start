@@ -1,5 +1,6 @@
 import { plugins } from './plugins.js'
 import { paths } from './paths.js'
+import postcssConfigModule from '../../postcss.config.cjs'
 // Константа, определяющая режим сборки (разработка или продакшн)
 export const isProduction = process.env.NODE_ENV === 'production'
 
@@ -41,16 +42,6 @@ export const serverOptions = {
 	notify: false,
 }
 
-// Настройки сервера для продакшна
-export const customerServerOptions = {
-	server: {
-		baseDir: paths.dest.dev,
-	},
-	port: 4000,
-	open: true,
-	notify: false,
-}
-
 // Функция для обработки ошибок с уведомлением
 export const plumberNotify = title => {
 	return {
@@ -61,3 +52,5 @@ export const plumberNotify = title => {
 		}),
 	}
 }
+export const postcssPlugins = postcssConfigModule
+export const useTailwind = true

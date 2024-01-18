@@ -15,18 +15,20 @@ import { styles } from './gulp/tasks/styles.js'
 import { stylesMin } from './gulp/tasks/stylesMin.js'
 
 // Экспорт задач
-export { archive }
-export { cleanTask }
-export { files }
-export { fonts }
-export { html }
-export { images }
-export { scripts }
-export { scriptsMin }
-export { server }
 
-export { styles }
-export { stylesMin }
+export {
+	archive,
+	cleanTask,
+	files,
+	fonts,
+	html,
+	images,
+	scripts,
+	scriptsMin,
+	server,
+	styles,
+	stylesMin,
+}
 
 // Задача для отслеживания изменений в файлах и автоматической пересборки
 export const watch = () => {
