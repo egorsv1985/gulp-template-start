@@ -6,7 +6,7 @@ import { plugins } from '../config/plugins.js'
 export const files = () => {
 	return plugins.gulp
 		.src(paths.src.files)
-		.pipe(plugins.changed(filesDestination))
+		.pipe(plugins.newer(filesDestination))
 		.pipe(plugins.gulp.dest(filesDestination))
 		.pipe(plugins.browserSync.stream())
 }

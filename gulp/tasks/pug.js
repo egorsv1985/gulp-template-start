@@ -11,7 +11,7 @@ import { plugins } from '../config/plugins.js'
 export const pug = () => {
 	return plugins.gulp
 		.src(paths.src.pug)
-		.pipe(plugins.changed(destination, { extension: '.html' }))
+		.pipe(plugins.newer(destination, { extension: '.html' }))
 		.pipe(plugins.plumber(plumberNotify('Pug')))
 		.pipe(plugins.fileInclude(fileIncludeSettings))
 		.pipe(plugins.gulpIf(isProduction, plugins.webpHTML()))

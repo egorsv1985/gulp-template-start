@@ -13,7 +13,7 @@ import { plugins } from '../config/plugins.js'
 export const styles = () => {
 	return plugins.gulp
 		.src(paths.src.scss)
-		.pipe(plugins.changed(cssDestination))
+		.pipe(plugins.newer(cssDestination))
 		.pipe(plugins.plumber(plumberNotify('SCSS')))
 		.pipe(plugins.sourceMaps.init())
 		.pipe(plugins.sassGlob())

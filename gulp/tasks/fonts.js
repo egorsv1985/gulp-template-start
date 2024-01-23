@@ -6,7 +6,7 @@ import { plugins } from '../config/plugins.js'
 export const fonts = () => {
 	return plugins.gulp
 		.src(paths.src.fonts)
-		.pipe(plugins.changed(fontsDestination))
+		.pipe(plugins.newer(fontsDestination))
 		.pipe(plugins.gulp.dest(fontsDestination))
 		.pipe(plugins.browserSync.stream())
 }
