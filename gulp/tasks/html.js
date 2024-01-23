@@ -17,7 +17,7 @@ export const html = () => {
 		.pipe(plugins.fileInclude({ ...fileIncludeSettings, force: true }))
 		.pipe(plugins.gulpIf(isProduction, plugins.webpHTML()))
 		.pipe(plugins.replace('@img', paths.img.html))
-		.pipe(plugins.changed(destination, { extension: '.html' })) // Отслеживаем изменения только в файлах, которые уже были обработаны
+		.pipe(plugins.changed(destination, { extension: '.html' }))
 		.pipe(plugins.gulp.dest(destination))
 		.pipe(plugins.browserSync.stream())
 }
