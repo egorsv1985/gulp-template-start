@@ -19,9 +19,9 @@ export const fileIncludeSettings = {
 export const sassOptions = {
 	includePaths: ['./node_modules'],
 }
-export const filterScss = plugins.filter(['**/*', '!src/scss/**/_*.scss'], {
-	restore: true,
-})
+// export const filterScss = plugins.filter(['**/*', '!src/scss/**/_*.scss'], {
+// 	restore: true,
+// })
 // Определение путей для различных задач
 export const destination = paths.dest.dev
 export const cssDestination = destination + 'css/'
